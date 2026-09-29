@@ -9,7 +9,8 @@ export default defineConfig({
   preview: {
     host: "0.0.0.0",
     port: Number(process.env.PORT) || 4173,
-    strictPort: true
+    strictPort: true,
+    allowedHosts: ["surakshasetu-7tuc.onrender.com"]
   },
   build: {
     target: "es2019",
