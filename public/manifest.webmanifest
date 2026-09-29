@@ -1,0 +1,17 @@
+{
+  "name": "SurakshaSetu",
+  "short_name": "SurakshaSetu",
+  "description": "Industrial safety training, assessment and certification",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6faf8",
+  "theme_color": "#087f5b",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
