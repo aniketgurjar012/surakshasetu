@@ -1,4 +1,4 @@
-const CACHE = "surakshasetu-v1";
+const CACHE = "surakshasetu-v2";
 
 self.addEventListener("install", event => {
   event.waitUntil(
@@ -10,23 +10,34 @@ self.addEventListener("install", event => {
 });
 
 self.addEventListener("activate", event => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then(names =>
+      Promise.all(
+        names
+          .filter(name => name.startsWith("surakshasetu-") && name !== CACHE)
+          .map(name => caches.delete(name))
+      )
+    ).then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
+  if (new URL(event.request.url).origin !== self.location.origin) return;
 
   event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        const copy = response.clone();
-        caches.open(CACHE).then(cache => cache.put(event.request, copy));
+    (async () => {
+      try {
+        const response = await fetch(event.request);
+        if (response.ok) {
+          const cache = await caches.open(CACHE);
+          await cache.put(event.request, response.clone());
+        }
         return response;
-      })
-      .catch(() =>
-        caches.match(event.request).then(cached =>
-          cached || caches.match("/")
-        )
-      )
+      } catch {
+        const cached = await caches.match(event.request);
+        return cached || (event.request.mode === "navigate" ? caches.match("/") : Response.error());
+      }
+    })()
   );
 });
