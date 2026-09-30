@@ -14,9 +14,9 @@ export const modules = [
       sat:"ᱥᱮᱸᱜᱮᱞ ᱦᱟᱡᱟᱨᱰ ᱵᱟᱰᱟᱭ ᱟᱨ ᱥᱩᱨᱚᱠᱪᱷᱟ ᱠᱟᱹᱢᱤ ᱥᱤᱠᱷᱟᱹ."
     },
     topics:[
-      "Exit identification",
-      "Extinguisher selection",
-      "Evacuation sequence"
+      {en:"Exit identification",hi:"निकास की पहचान",sat:"ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱪᱤᱱᱦᱟᱹᱯ"},
+      {en:"Extinguisher selection",hi:"अग्निशामक का चयन",sat:"ᱥᱮᱸᱜᱮᱞ ᱱᱤᱵᱷᱟᱹᱣᱟᱠ ᱵᱟᱪᱷᱟᱣ"},
+      {en:"Evacuation sequence",hi:"निकासी का क्रम",sat:"ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱠᱚᱨᱚᱢ"}
     ]
   },
   {
@@ -33,7 +33,11 @@ export const modules = [
       hi:"वायुमंडलीय खतरों, पीपीई और बडी सिस्टम प्रक्रियाओं को समझें.",
       sat:"ᱜᱮᱥ ᱦᱟᱡᱟᱨᱰ, PPE ᱟᱨ ᱵᱟᱰᱤ ᱥᱤᱥᱴᱚᱢ ᱵᱟᱰᱟᱭ."
     },
-    topics:["Hazard zone","PPE selection","Buddy system"]
+    topics:[
+      {en:"Hazard zone",hi:"खतरे का क्षेत्र",sat:"ᱦᱟᱡᱟᱨᱰ ᱴᱷᱟᱶ"},
+      {en:"PPE selection",hi:"PPE का चयन",sat:"PPE ᱵᱟᱪᱷᱟᱣ"},
+      {en:"Buddy system",hi:"साथी प्रणाली",sat:"ᱵᱟᱰᱤ ᱵᱮᱵᱚᱥᱛᱷᱟ"}
+    ]
   },
   {
     id:"machine",
@@ -49,7 +53,12 @@ export const modules = [
       hi:"चलते हिस्सों, मशीन गार्ड, आइसोलेशन और आपात स्टॉप को समझें.",
       sat:"ᱢᱮᱥᱤᱱ ᱦᱟᱡᱟᱨᱰ ᱟᱨ ᱤᱥᱚᱞᱮᱥᱚᱱ ᱵᱟᱰᱟᱭ."
     },
-    topics:["Moving parts","Machine guards","Emergency stop","Energy isolation"]
+    topics:[
+      {en:"Moving parts",hi:"चलते हुए हिस्से",sat:"ᱦᱟᱞᱤ ᱠᱟᱱ ᱦᱤᱸᱥ"},
+      {en:"Machine guards",hi:"मशीन गार्ड",sat:"ᱢᱮᱥᱤᱱ ᱜᱟᱨᱰ"},
+      {en:"Emergency stop",hi:"आपातकालीन रोक",sat:"ᱟᱯᱟᱛᱠᱟᱞᱤᱱ ᱛᱷᱟᱢ"},
+      {en:"Energy isolation",hi:"ऊर्जा अलग करना",sat:"ᱮᱱᱟᱨᱡᱤ ᱟᱞᱜᱟ ᱦᱚᱪᱚ"}
+    ]
   },
   {
     id:"electrical",
@@ -65,7 +74,11 @@ export const modules = [
       hi:"विद्युत खतरों की पहचान और सुरक्षित आइसोलेशन प्रक्रियाएं सीखें.",
       sat:"ᱵᱤᱡᱽᱞᱤ ᱦᱟᱡᱟᱨᱰ ᱟᱨ ᱥᱮᱯᱷ ᱰᱤᱥᱴᱟᱱᱥ ᱵᱟᱰᱟᱭ."
     },
-    topics:["Electrical hazards","Isolation","Safe distance"]
+    topics:[
+      {en:"Electrical hazards",hi:"विद्युत संबंधी खतरे",sat:"ᱵᱤᱡᱽᱞᱤ ᱦᱟᱡᱟᱨᱰ"},
+      {en:"Isolation",hi:"अलग करना",sat:"ᱟᱞᱜᱟ ᱦᱚᱪᱚ"},
+      {en:"Safe distance",hi:"सुरक्षित दूरी",sat:"ᱥᱩᱨᱚᱠᱪᱷᱟ ᱫᱩᱨᱤ"}
+    ]
   },
   {
     id:"ppe",
@@ -81,7 +94,12 @@ export const modules = [
       hi:"कार्यस्थल के खतरों के लिए उचित व्यक्तिगत सुरक्षा उपकरण चुनें.",
       sat:"ᱠᱟᱹᱢᱤ ᱴᱷᱟᱶ ᱦᱟᱡᱟᱨᱰ ᱞᱟᱹᱜᱤᱫ PPE ᱵᱟᱪᱷᱟᱣ."
     },
-    topics:["Helmet","Eye protection","Respiratory protection","Hazard recognition"]
+    topics:[
+      {en:"Helmet",hi:"हेलमेट",sat:"ᱦᱮᱞᱢᱮᱴ"},
+      {en:"Eye protection",hi:"आँखों की सुरक्षा",sat:"ᱢᱮᱫ ᱥᱩᱨᱚᱠᱪᱷᱟ"},
+      {en:"Respiratory protection",hi:"श्वसन सुरक्षा",sat:"ᱥᱟᱸᱥ ᱥᱩᱨᱚᱠᱪᱷᱟ"},
+      {en:"Hazard recognition",hi:"खतरे की पहचान",sat:"ᱦᱟᱡᱟᱨᱰ ᱪᱤᱱᱦᱟᱹᱯ"}
+    ]
   }
 ];
 

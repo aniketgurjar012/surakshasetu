@@ -14,12 +14,12 @@ import {useApp} from "../../context/AppContext";
 export default function Module(){
   const {id}=useParams();
   const nav=useNavigate();
-  const {lang}=useApp();
+  const {lang,t}=useApp();
 
   const module=getModule(id);
 
   if(!module){
-    return <div>Module not found.</div>;
+    return <div>{t("moduleNotFound")}</div>;
   }
 
   return (
@@ -32,7 +32,7 @@ export default function Module(){
           onClick={()=>nav("/worker")}
         >
           <ArrowLeft/>
-          Back to dashboard
+          {t("backToDashboard")}
         </button>
 
         <section
@@ -44,7 +44,7 @@ export default function Module(){
           </div>
 
           <div>
-            <span>SAFETY TRAINING MODULE</span>
+            <span>{t("safetyModule").toUpperCase()}</span>
             <h1>
               {module.title[lang]||
                module.title.en}
@@ -61,8 +61,8 @@ export default function Module(){
           <article className="panel">
             <div className="title-row">
               <div>
-                <span>01 • UNDERSTAND</span>
-                <h2>Learning objectives</h2>
+                <span>01 • {t("understand").toUpperCase()}</span>
+                <h2>{t("learningObjectives")}</h2>
               </div>
               <BookOpen/>
             </div>
@@ -70,10 +70,10 @@ export default function Module(){
             {module.topics.map(topic=>(
               <div
                 className="learning-point"
-                key={topic}
+                key={topic.en}
               >
                 <CheckCircle2/>
-                {topic}
+                {topic[lang]||topic.en}
               </div>
             ))}
           </article>
@@ -81,20 +81,14 @@ export default function Module(){
           <article className="panel">
             <div className="title-row">
               <div>
-                <span>02 • SAFETY PRINCIPLE</span>
-                <h2>Remember</h2>
+                <span>02 • {t("safetyPrinciple").toUpperCase()}</span>
+                <h2>{t("remember")}</h2>
               </div>
               <ShieldCheck/>
             </div>
 
             <p className="training-copy">
-              Stop and assess the hazard before
-              acting. Follow site procedures,
-              warning signs, authorised isolation,
-              required PPE and emergency
-              instructions. Never enter a hazardous
-              area merely to complete a training
-              activity.
+              {t("safetyPrincipleText")}
             </p>
           </article>
         </section>
@@ -109,10 +103,10 @@ export default function Module(){
             <Camera/>
             <div>
               <strong>
-                Interactive Practical
+                {t("practical")}
               </strong>
               <span>
-                Camera-assisted hazard exercise
+                {t("cameraExercise")}
               </span>
             </div>
           </button>
@@ -126,10 +120,10 @@ export default function Module(){
             <ClipboardCheck/>
             <div>
               <strong>
-                Start Assessment
+                {t("startAssessment")}
               </strong>
               <span>
-                Complete the module test
+                {t("completeModuleTest")}
               </span>
             </div>
           </button>

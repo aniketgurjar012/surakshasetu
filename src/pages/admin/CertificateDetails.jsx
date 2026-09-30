@@ -13,8 +13,11 @@ import {useParams} from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import AdminHeader from "../../components/admin/AdminHeader";
 import {supabase} from "../../lib/supabase";
+import {useApp} from "../../context/AppContext";
+import {getModule} from "../../data/modules";
 
 export default function CertificateDetails(){
+  const {lang,t,formatDate}=useApp();
   const {id}=useParams();
 
   const [cert,setCert]=useState(null);
@@ -48,7 +51,7 @@ export default function CertificateDetails(){
 
   async function revoke(){
     if(!confirm(
-      "Revoke this certificate?"
+      t("certificateRevokeConfirm")
     ))return;
 
     const {error}=await supabase
@@ -82,9 +85,9 @@ export default function CertificateDetails(){
 
       <main className="admin-shell">
         <AdminHeader
-          eyebrow="CERTIFICATE DETAIL"
+          eyebrow={t("certificate").toUpperCase()}
           title={cert.certificate_no}
-          description="Original issued certificate record."
+          description={t("originalCertificateRecord")}
         >
           {!cert.revoked&&(
             <button
@@ -92,7 +95,7 @@ export default function CertificateDetails(){
               onClick={revoke}
             >
               <ShieldX/>
-              Revoke Certificate
+              {t("revoke")} {t("certificate")}
             </button>
           )}
         </AdminHeader>
@@ -113,11 +116,11 @@ export default function CertificateDetails(){
           </span>
 
           <h1>
-            Certificate of Completion
+            {t("certificateOfCompletion")}
           </h1>
 
           <p>
-            This certificate was issued to
+            {t("awardedTo")}
           </p>
 
           <h2>
@@ -125,38 +128,36 @@ export default function CertificateDetails(){
           </h2>
 
           <p>
-            Worker ID:
+            {t("workerId")}:
             {" "}
             {worker?.public_id}
           </p>
 
           <h3>
-            {cert.module_id}
+            {getModule(cert.module_id)?.title?.[lang]||cert.module_id}
           </h3>
 
           <div className="certificate-admin-info">
             <div>
-              <span>Score</span>
+              <span>{t("score")}</span>
               <b>
                 {Math.round(cert.score)}%
               </b>
             </div>
 
             <div>
-              <span>Issued</span>
+              <span>{t("issued")}</span>
               <b>
-                {new Date(
-                  cert.issued_at
-                ).toLocaleDateString()}
+                formatDate(cert.issued_at)
               </b>
             </div>
 
             <div>
-              <span>Status</span>
+              <span>{t("status")}</span>
               <b>
                 {cert.revoked
-                  ?"REVOKED"
-                  :"VERIFIED"}
+                  ?t("revoked").toUpperCase()
+                  :t("verified").toUpperCase()}
               </b>
             </div>
           </div>

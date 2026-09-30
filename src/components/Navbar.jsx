@@ -29,9 +29,9 @@ export default function Navbar() {
           {menu==="profile" && (
             <div className="popover">
               {session ? <>
-                <strong>{profile?.name || "User"}</strong>
+                <strong>{profile?.name || t("user")}</strong>
                 <small>{profile?.public_id}</small>
-                <small className="role">{profile?.role}</small>
+                <small className="role">{profile?.role==="admin"?t("administrator"):t("worker")}</small>
               </> : <>
                 <button onClick={()=>nav("/auth?mode=login")}>{t("login")}</button>
                 <button onClick={()=>nav("/auth?mode=register")}>{t("register")}</button>

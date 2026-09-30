@@ -19,17 +19,15 @@ export default function Home(){
       <section className="hero">
         <div className="hero-copy">
           <div className="eyebrow">
-            <ShieldCheck size={17}/> Smart Industrial Safety Training
+            <ShieldCheck size={17}/> {t("safetyEyebrow")}
           </div>
-          <h1>Safety training that workers can <span>see, practise and remember.</span></h1>
+          <h1>{t("heroTitle")} <span>{t("heroTitleAccent")}</span></h1>
           <p>
-            SurakshaSetu brings interactive safety training, camera-based
-            practical scenarios, assessments and verifiable certification
-            to mining and manufacturing workers across Jharkhand.
+            {t("heroDescription")}
           </p>
           <div className="hero-buttons">
             <button className="primary" onClick={()=>nav("/auth?mode=register")}>
-              Get Started <ArrowRight size={18}/>
+              {t("getStarted")} <ArrowRight size={18}/>
             </button>
             <button className="secondary" onClick={()=>nav("/verify")}>
               <QrCode size={18}/> {t("verify")}
@@ -37,8 +35,8 @@ export default function Home(){
           </div>
 
           <div className="trust-row">
-            <span><CheckCircle2/>Android 10+</span>
-            <span><CheckCircle2/>No headset</span>
+            <span><CheckCircle2/>{t("android")}</span>
+            <span><CheckCircle2/>{t("noHeadset")}</span>
             <span><CheckCircle2/>{t("offline")}</span>
           </div>
         </div>
@@ -47,55 +45,55 @@ export default function Home(){
           <div className="phone-frame">
             <div className="phone-top"/>
             <Logo/>
-            <h3>Industrial Safety</h3>
+            <h3>{t("industrialSafety")}</h3>
             <div className="mini-progress"><i/></div>
             <div className="mini-grid">
-              <div>🔥<b>Fire Safety</b></div>
-              <div>☣️<b>Gas Safety</b></div>
-              <div>⚙️<b>Machinery</b></div>
-              <div>⚡<b>Electrical</b></div>
+              <div>🔥<b>{t("fireSafety")}</b></div>
+              <div>☣️<b>{t("gasSafety")}</b></div>
+              <div>⚙️<b>{t("machinery")}</b></div>
+              <div>⚡<b>{t("electrical")}</b></div>
             </div>
             <div className="safe-message">
-              <ShieldCheck/> Safety readiness: 82%
+              <ShieldCheck/> {t("safetyReadiness")}: 82%
             </div>
           </div>
         </div>
       </section>
 
       <section className="stats">
-        <div><strong>5</strong><span>Safety domains</span></div>
-        <div><strong>3</strong><span>Languages</span></div>
-        <div><strong>AR</strong><span>Camera training</span></div>
-        <div><strong>QR</strong><span>Verified certificates</span></div>
+        <div><strong>5</strong><span>{t("safetyDomains")}</span></div>
+        <div><strong>3</strong><span>{t("languages")}</span></div>
+        <div><strong>AR</strong><span>{t("cameraTraining")}</span></div>
+        <div><strong>QR</strong><span>{t("verifiedCertificates")}</span></div>
       </section>
 
       <section className="section">
         <div className="section-heading">
-          <span>Training ecosystem</span>
-          <h2>One platform, complete safety journey</h2>
-          <p>Learn concepts, practise scenarios, prove understanding and carry a verifiable safety record.</p>
+          <span>{t("trainingEcosystem")}</span>
+          <h2>{t("platformJourney")}</h2>
+          <p>{t("journeyDescription")}</p>
         </div>
 
         <div className="feature-grid">
-          <Feature icon={<Camera/>} title="Interactive AR Training"
-            text="Camera-led hazard recognition and interactive safety scenarios without an external headset."/>
-          <Feature icon={<CloudOff/>} title="Low-connectivity Ready"
-            text="Optimised training assets and PWA caching for field environments with unreliable internet."/>
-          <Feature icon={<Languages/>} title="Regional Language Access"
-            text="English, Hindi and Santali content architecture for a more accessible worker experience."/>
-          <Feature icon={<QrCode/>} title="QR Certification"
-            text="Unique certificate records connected to a public verification flow."/>
-          <Feature icon={<Users/>} title="Admin Compliance"
-            text="Worker, assessment, certification and completion information in one dashboard."/>
-          <Feature icon={<Smartphone/>} title="Mobile First"
-            text="Responsive interface designed around affordable Android smartphones."/>
+          <Feature icon={<Camera/>} title={t("interactiveTraining")}
+            text={t("interactiveTrainingDesc")}/>
+          <Feature icon={<CloudOff/>} title={t("lowConnectivity")}
+            text={t("lowConnectivityDesc")}/>
+          <Feature icon={<Languages/>} title={t("regionalLanguages")}
+            text={t("regionalLanguagesDesc")}/>
+          <Feature icon={<QrCode/>} title={t("qrCertification")}
+            text={t("qrCertificationDesc")}/>
+          <Feature icon={<Users/>} title={t("adminCompliance")}
+            text={t("adminComplianceDesc")}/>
+          <Feature icon={<Smartphone/>} title={t("mobileFirst")}
+            text={t("mobileFirstDesc")}/>
         </div>
       </section>
 
       <section className="modules-section">
         <div className="section-heading">
           <span>{t("modules")}</span>
-          <h2>Practical training for critical hazards</h2>
+          <h2>{t("practicalTraining")}</h2>
         </div>
 
         <div className="module-grid">
@@ -105,7 +103,7 @@ export default function Home(){
               <div className="module-number">0{i+1}</div>
               <div className="module-icon">{m.icon}</div>
               <h3>{m.title[lang]}</h3>
-              <ul>{m.topics.map(x=><li key={x}>{x}</li>)}</ul>
+              <ul>{m.topics.map(x=><li key={x.en}>{x[lang]||x.en}</li>)}</ul>
             </article>
           )}
         </div>
@@ -113,16 +111,16 @@ export default function Home(){
 
       <section className="workflow section">
         <div className="section-heading">
-          <span>How it works</span>
-          <h2>From learning to verified certification</h2>
+          <span>{t("howItWorks")}</span>
+          <h2>{t("verifiedJourney")}</h2>
         </div>
 
         <div className="steps">
           {[
-            ["01","Learn","Study visual safety content"],
-            ["02","Practise","Complete interactive scenarios"],
-            ["03","Assess","Answer module assessments"],
-            ["04","Certify","Receive a QR-verifiable record"]
+            ["01",t("learn"),t("journeyLearn")],
+            ["02",t("practise"),t("journeyPractise")],
+            ["03",t("assess"),t("journeyAssess")],
+            ["04",t("certify"),t("journeyCertify")]
           ].map(([n,a,b])=>
             <div className="step" key={n}>
               <b>{n}</b><h3>{a}</h3><p>{b}</p>
@@ -133,18 +131,18 @@ export default function Home(){
 
       <section className="cta">
         <BadgeCheck size={45}/>
-        <h2>Build a safer, better-prepared workforce.</h2>
-        <p>Training, assessment and compliance connected through one simple platform.</p>
+        <h2>{t("saferWorkforce")}</h2>
+        <p>{t("connectedPlatform")}</p>
         <button className="light-button" onClick={()=>nav("/auth?mode=register")}>
-          Access SurakshaSetu <ArrowRight size={18}/>
+          {t("accessSurakshaSetu")} <ArrowRight size={18}/>
         </button>
       </section>
     </main>
 
     <footer>
       <Logo/>
-      <p>Industrial safety learning for Jharkhand's workforce.</p>
-      <span>Developed by <b>Code Buddies+</b> • SIH Problem Statement 26041</span>
+      <p>{t("industrialLearning")}</p>
+      <span>{t("developedBy")} <b>Code Buddies+</b> • {t("problemStatement")}</span>
     </footer>
   </>;
 }

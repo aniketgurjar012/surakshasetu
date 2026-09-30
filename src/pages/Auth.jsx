@@ -15,7 +15,7 @@ export default function Auth(){
   const [error,setError]=useState("");
   const [busy,setBusy]=useState(false);
   const nav=useNavigate();
-  const {session,profile}=useApp();
+  const {session,profile,lang,setLang,t}=useApp();
 
   useEffect(()=>{
     if(session&&profile) nav(profile.role==="admin"?"/admin":"/worker");
@@ -28,7 +28,7 @@ export default function Auth(){
     setError("");
 
     if(!configured){
-      setError("Backend is not configured. Add Supabase values to .env first.");
+      setError(t("backendNotConfigured"));
       return;
     }
 
@@ -42,7 +42,7 @@ export default function Auth(){
         });
         if(authError) throw authError;
 
-        if(!data.user) throw new Error("Could not create account.");
+        if(!data.user) throw new Error(t("accountCouldNotBeCreated"));
 
         const {error:pError}=await supabase.from("profiles").insert({
           id:data.user.id,
@@ -54,7 +54,7 @@ export default function Auth(){
         if(pError) throw pError;
 
         if(!data.session){
-          setError("Account created. Confirm your email, then login.");
+          setError(t("confirmEmailToLogin"));
           setMode("login");
         }
       }else{
@@ -75,55 +75,64 @@ export default function Auth(){
       <Logo/>
       <div>
         <div className="eyebrow"><ShieldCheck size={17}/> SurakshaSetu</div>
-        <h1>Industrial safety starts with preparation.</h1>
-        <p>Access training, practical simulations, assessments and verifiable safety credentials.</p>
+        <h1>{t("authEyebrow")}</h1>
+        <p>{t("authDescription")}</p>
       </div>
       <small>Code Buddies+ • SIH 26041</small>
     </section>
 
     <section className="auth-form-wrap">
+      <label className="auth-language">
+        <span>{t("language")}</span>
+        <select value={lang} onChange={e=>setLang(e.target.value)}>
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="sat">ᱥᱟᱱᱛᱟᱲᱤ</option>
+        </select>
+      </label>
+
       <button className="back-link" onClick={()=>nav("/")}>
-        <ArrowLeft/> Back to home
+        <ArrowLeft/> {t("backToHome")}
       </button>
 
       <div className="auth-card">
         <LockKeyhole className="auth-symbol"/>
-        <h2>{mode==="login"?"Welcome back":"Create your account"}</h2>
-        <p>{mode==="login"?"Sign in securely to continue.":"Choose your role and enter your identity details."}</p>
+        <h2>{mode==="login"?t("welcomeBack"):t("createAccount")}</h2>
+        <p>{mode==="login"?t("signInContinue"):t("chooseRole")}</p>
 
         <div className="role-switch">
-          <button className={role==="worker"?"active":""} onClick={()=>setRole("worker")}>Worker</button>
-          <button className={role==="admin"?"active":""} onClick={()=>setRole("admin")}>Administrator</button>
+          <button className={role==="worker"?"active":""} onClick={()=>setRole("worker")}>{t("worker")}</button>
+          <button className={role==="admin"?"active":""} onClick={()=>setRole("admin")}>{t("administrator")}</button>
         </div>
 
         <form onSubmit={submit}>
           {mode==="register" && <>
-            <label>Full name<input required name="name" value={form.name} onChange={change}/></label>
-            <label>{role==="worker"?"Worker ID":"Admin ID"}
+            <label>{t("fullName")}<input required name="name" value={form.name} onChange={change}/></label>
+            <label>{role==="worker"?t("workerId"):t("adminId")}
               <input required name="publicId" value={form.publicId} onChange={change}/>
             </label>
             {role==="worker" &&
-              <label>Sector<select name="sector" value={form.sector} onChange={change}>
-                <option>Mining</option><option>Steel</option>
-                <option>Manufacturing</option><option>Mica Processing</option>
-                <option>Contract Work</option><option>Other</option>
+              <label>{t("sector")}<select name="sector" value={form.sector} onChange={change}>
+                <option value="Mining">{t("mining")}</option><option value="Steel">{t("steel")}</option>
+                <option value="Manufacturing">{t("manufacturing")}</option><option value="Mica Processing">{t("micaProcessing")}</option>
+                <option value="Contract Work">{t("contractWork")}</option><option value="Other">{t("other")}</option>
               </select></label>}
           </>}
 
-          <label>Email<input type="email" required name="email" value={form.email} onChange={change}/></label>
-          <label>Password<input type="password" minLength="6" required name="password" value={form.password} onChange={change}/></label>
+          <label>{t("email")}<input type="email" required name="email" value={form.email} onChange={change}/></label>
+          <label>{t("password")}<input type="password" minLength="6" required name="password" value={form.password} onChange={change}/></label>
 
           {error&&<div className="form-error">{error}</div>}
 
           <button className="primary full" disabled={busy}>
-            {busy?"Please wait...":mode==="login"?"Login":"Register"}
+            {busy?t("pleaseWait"):mode==="login"?t("login"):t("register")}
           </button>
         </form>
 
         <div className="switch-mode">
-          {mode==="login"?"New to SurakshaSetu? ":"Already registered? "}
+          {mode==="login"?t("newToApp"):t("alreadyRegistered")}{" "}
           <button onClick={()=>setMode(mode==="login"?"register":"login")}>
-            {mode==="login"?"Register":"Login"}
+            {mode==="login"?t("register"):t("login")}
           </button>
         </div>
       </div>

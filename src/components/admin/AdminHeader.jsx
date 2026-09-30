@@ -10,7 +10,7 @@ export default function AdminHeader({
   children
 }){
   const nav=useNavigate();
-  const {lang}=useApp();
+  const {t}=useApp();
 
   return (
     <div className="admin-page-head">
@@ -21,11 +21,7 @@ export default function AdminHeader({
             onClick={()=>nav("/admin")}
           >
             <ArrowLeft/>
-            {lang==="hi"
-              ?"डैशबोर्ड पर वापस"
-              :lang==="sat"
-                ?"ᱰᱮᱥᱵᱳᱨᱰ ᱨᱮ ᱨᱩᱣᱟᱹᱲ"
-                :"Back to dashboard"}
+            {t("backToDashboard")}
           </button>
         )}
 

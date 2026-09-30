@@ -17,8 +17,15 @@ import {modules} from "../../data/modules";
 import {supabase} from "../../lib/supabase";
 import {useApp} from "../../context/AppContext";
 
+const localizedLabels={
+  en:{mcq:"Multiple choice",scenario:"Scenario",image:"Image + MCQ",true_false:"True / False",options:"options",edit:"Edit",delete:"Delete"},
+  hi:{mcq:"बहुविकल्पीय",scenario:"परिदृश्य",image:"चित्र + बहुविकल्पीय",true_false:"सही / गलत",options:"विकल्प",edit:"संपादित करें",delete:"हटाएँ"},
+  sat:{mcq:"ᱟᱹᱰᱤ ᱡᱚᱵᱟᱵ ᱵᱟᱪᱷᱟᱣ",scenario:"ᱥᱤᱢᱩᱞᱮᱥᱚᱱ",image:"ᱪᱤᱛᱟᱹᱨ + ᱡᱚᱵᱟᱵ ᱵᱟᱪᱷᱟᱣ",true_false:"ᱥᱟᱹᱨᱤ / ᱵᱟᱝ ᱥᱟᱹᱨᱤ",options:"ᱵᱟᱪᱷᱟᱣ",edit:"ᱥᱚᱢᱯᱟᱫᱚᱱ",delete:"ᱰᱤᱞᱤᱴ"}
+};
+
 export default function Questions(){
-  const {lang}=useApp();
+  const {lang,t}=useApp();
+  const labels=localizedLabels[lang]||localizedLabels.en;
   const nav=useNavigate();
   const [params,setParams]=useSearchParams();
 
@@ -66,7 +73,7 @@ export default function Questions(){
   },[questions,search]);
 
   async function remove(question){
-    if(!confirm("Delete this question?"))return;
+    if(!confirm(t("questionDeleteConfirm")))return;
 
     const {error}=await supabase
       .from("questions")
@@ -83,11 +90,11 @@ export default function Questions(){
 
   function text(q){
     if(lang==="hi"){
-      return q.question_hi||q.question_en;
+      return q.question_hi||t("translationUnavailable");
     }
 
     if(lang==="sat"){
-      return q.question_sat||q.question_en;
+      return q.question_sat||t("translationUnavailable");
     }
 
     return q.question_en;
@@ -99,15 +106,9 @@ export default function Questions(){
 
       <main className="admin-shell">
         <AdminHeader
-          eyebrow="ASSESSMENT ENGINE"
-          title={
-            lang==="hi"
-              ?"प्रश्न प्रबंधक"
-              :lang==="sat"
-                ?"ᱠᱩᱠᱞᱤ ᱢᱮᱱᱮᱡᱚᱨ"
-                :"Question Manager"
-          }
-          description="Create, edit and delete multilingual assessment questions."
+          eyebrow={t("assessmentEngine").toUpperCase()}
+          title={t("questionManager")}
+          description={t("questionManagerDescription")}
         >
           <button
             className="admin-primary"
@@ -122,7 +123,7 @@ export default function Questions(){
             }
           >
             <Plus/>
-            Add Question
+            {t("addQuestion")}
           </button>
         </AdminHeader>
 
@@ -140,7 +141,7 @@ export default function Questions(){
             }}
           >
             <option value="all">
-              All modules
+              {t("allModules")}
             </option>
 
             {modules.map(module=>(
@@ -160,7 +161,7 @@ export default function Questions(){
             <input
               value={search}
               onChange={e=>setSearch(e.target.value)}
-              placeholder="Search questions..."
+              placeholder={t("searchQuestions")}
             />
           </div>
         </section>
@@ -168,7 +169,7 @@ export default function Questions(){
         <section className="admin-panel">
           {!filtered.length?(
             <AdminEmptyState
-              text="No questions found."
+              text={t("questionsFound")}
             />
           ):(
             <div className="admin-question-list">
@@ -183,9 +184,9 @@ export default function Questions(){
 
                   <div className="admin-question-copy">
                     <span>
-                      {q.module_id}
+                      {modules.find(module=>module.id===q.module_id)?.title?.[lang]||q.module_id}
                       {" • "}
-                      {q.type}
+                      {labels[q.type]||q.type}
                     </span>
 
                     <h3>{text(q)}</h3>
@@ -193,13 +194,15 @@ export default function Questions(){
                     <small>
                       {
                         q.options_en?.length||0
-                      } options
+                      } {labels.options}
                     </small>
                   </div>
 
                   <div className="admin-row-actions">
                     <button
                       className="admin-icon"
+                      title={labels.edit}
+                      aria-label={labels.edit}
                       onClick={()=>
                         nav(
                           `/admin/questions/${q.id}/edit`
@@ -211,6 +214,8 @@ export default function Questions(){
 
                     <button
                       className="admin-icon danger"
+                      title={labels.delete}
+                      aria-label={labels.delete}
                       onClick={()=>remove(q)}
                     >
                       <Trash2/>

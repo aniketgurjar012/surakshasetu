@@ -94,7 +94,96 @@ const exercises={
   }
 };
 
-const getText=(value,lang)=>value?.[lang]||value?.en||value;
+const santaliExerciseText={
+  "Identify the safest emergency exit.":"ᱥᱟᱵᱟᱛ ᱟᱯᱟᱛᱠᱟᱞᱤᱱ ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱪᱤᱱᱦᱟᱹᱯ ᱢᱮ᱾",
+  "Marked exit or evacuation route":"ᱪᱤᱱᱦᱟᱹ ᱟᱠᱟᱱ ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱥᱮ ᱵᱟᱦᱨᱮ ᱥᱮᱱ ᱦᱚᱨ",
+  "Scan the scene for an exit sign and route.":"ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱪᱤᱱᱦᱟᱹ ᱟᱨ ᱦᱚᱨ ᱧᱮᱞ ᱢᱮ᱾",
+  "Tap the area you want to identify.":"ᱚᱠᱟ ᱴᱷᱟᱶ ᱪᱤᱱᱦᱟᱹᱯ ᱥᱟᱱᱟᱢ, ᱚᱱᱟ ᱴᱷᱟᱶ ᱨᱮ ᱴᱮᱯ ᱢᱮ᱾",
+  "Choose a clear exit, not a blocked route or lift.":"ᱠᱷᱚᱞᱟ ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱵᱟᱪᱷᱟᱣ ᱢᱮ, ᱵᱚᱸᱫ ᱦᱚᱨ ᱥᱮ ᱞᱤᱯᱷᱴ ᱵᱟᱝ᱾",
+  "Marked emergency exit":"ᱪᱤᱱᱦᱟᱹ ᱟᱠᱟᱱ ᱟᱯᱟᱛᱠᱟᱞᱤᱱ ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ",
+  "Correct. Use the marked exit and follow the evacuation signs.":"ᱴᱷᱤᱠ᱾ ᱪᱤᱱᱦᱟᱹ ᱟᱠᱟᱱ ᱚᱰᱚᱠ ᱵᱮᱵᱚᱦᱟᱨ ᱢᱮ ᱟᱨ ᱵᱟᱦᱨᱮ ᱥᱮᱱ ᱪᱤᱱᱦᱟᱹ ᱢᱟᱱ ᱢᱮ᱾",
+  "Blocked corridor":"ᱵᱚᱸᱫ ᱜᱟᱞᱤ",
+  "A blocked route can trap people. Keep clear and use another marked exit.":"ᱵᱚᱸᱫ ᱦᱚᱨ ᱨᱮ ᱦᱚᱲ ᱟᱴᱠᱟᱣ ᱠᱟᱱᱟ᱾ ᱚᱱᱟ ᱠᱷᱚᱱ ᱥᱟᱯᱷᱟ ᱛᱟᱦᱮᱸ ᱟᱨ ᱮᱴᱟᱜ ᱪᱤᱱᱦᱟᱹ ᱚᱰᱚᱠ ᱵᱮᱵᱚᱦᱟᱨ ᱢᱮ᱾",
+  "Lift":"ᱞᱤᱯᱷᱴ",
+  "Do not use a lift during a fire. Use the marked stairs or emergency exit.":"ᱥᱮᱸᱜᱮᱞ ᱚᱠᱛᱚ ᱞᱤᱯᱷᱴ ᱟᱞᱚ ᱵᱮᱵᱚᱦᱟᱨᱭᱟ᱾ ᱪᱤᱱᱦᱟᱹ ᱥᱤᱲᱤ ᱥᱮ ᱟᱯᱟᱛᱠᱟᱞᱤᱱ ᱚᱰᱚᱠ ᱵᱮᱵᱚᱦᱟᱨ ᱢᱮ᱾",
+  "A gas hazard is suspected. Choose the safest action.":"ᱜᱮᱥ ᱦᱟᱡᱟᱨᱰ ᱥᱟᱹᱱᱫᱮᱦ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱥᱟᱵᱟᱛ ᱠᱟᱹᱢᱤ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
+  "Suspected hazard zone or access point":"ᱥᱟᱹᱱᱫᱮᱦ ᱦᱟᱡᱟᱨᱰ ᱴᱷᱟᱶ ᱥᱮ ᱵᱷᱤᱛᱨᱤ ᱥᱮᱱ ᱡᱚᱜ",
+  "Observe the area from a safe distance.":"ᱥᱩᱨᱚᱠᱪᱷᱟ ᱫᱩᱨᱤ ᱠᱷᱚᱱ ᱴᱷᱟᱶ ᱧᱮᱞ ᱢᱮ᱾",
+  "Mark the suspected zone without entering it.":"ᱵᱷᱤᱛᱨᱤ ᱵᱟᱝ ᱥᱮᱱ ᱛᱮ ᱥᱟᱹᱱᱫᱮᱦ ᱴᱷᱟᱶ ᱪᱤᱱᱦᱟᱹ ᱢᱮ᱾",
+  "Choose the access-control and emergency procedure.":"ᱵᱷᱤᱛᱨᱤ ᱥᱮᱱ ᱨᱚᱠᱚᱢ ᱟᱨ ᱟᱯᱟᱛᱠᱟᱞᱤᱱ ᱱᱤᱭᱚᱢ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
+  "Enter alone":"ᱟᱢ ᱢᱤᱫ ᱜᱟᱱ ᱵᱷᱤᱛᱨᱤ ᱥᱮᱱ",
+  "Never enter a suspected gas or confined-space hazard alone. The atmosphere may be immediately dangerous.":"ᱜᱮᱥ ᱥᱮ ᱵᱚᱸᱫ ᱴᱷᱟᱶ ᱦᱟᱡᱟᱨᱰ ᱥᱟᱹᱱᱫᱮᱦ ᱨᱮ ᱟᱢ ᱢᱤᱫ ᱜᱟᱱ ᱟᱞᱚᱢ ᱥᱮᱱᱚᱜᱼᱟ᱾ ᱦᱚᱭ ᱛᱟᱛᱠᱟᱞ ᱡᱚᱠᱷᱚᱢ ᱮᱢ ᱫᱟᱲᱮᱭᱟ᱾",
+  "Control access and follow gas/confined-space procedure":"ᱵᱷᱤᱛᱨᱤ ᱥᱮᱱ ᱵᱚᱸᱫ ᱢᱮ ᱟᱨ ᱜᱮᱥ/ᱵᱚᱸᱫ ᱴᱷᱟᱶ ᱱᱤᱭᱚᱢ ᱢᱟᱱ ᱢᱮ",
+  "Correct. Keep people out and follow the site gas or confined-space emergency procedure.":"ᱴᱷᱤᱠ᱾ ᱦᱚᱲ ᱠᱚ ᱵᱷᱤᱛᱨᱤ ᱟᱞᱚᱢ ᱥᱮᱱᱚᱜᱼᱟ ᱟᱨ ᱥᱟᱭᱤᱴ ᱜᱮᱥ ᱥᱮ ᱵᱚᱸᱫ ᱴᱷᱟᱶ ᱟᱯᱟᱛᱠᱟᱞᱤᱱ ᱱᱤᱭᱚᱢ ᱢᱟᱱ ᱢᱮ᱾",
+  "Remove PPE":"PPE ᱚᱪᱚᱜ",
+  "Removing PPE increases exposure. Do not enter; follow the approved procedure and use trained responders.":"PPE ᱚᱪᱚᱜ ᱨᱮ ᱦᱟᱡᱟᱨᱰ ᱞᱟᱹᱜᱤᱫ ᱮᱠᱥᱯᱚᱡᱚᱨ ᱵᱮᱲᱦᱟᱣᱜᱼᱟ᱾ ᱵᱷᱤᱛᱨᱤ ᱟᱞᱚᱢ ᱥᱮᱱᱚᱜᱼᱟ; ᱟᱹᱫᱮᱥ ᱱᱤᱭᱚᱢ ᱟᱨ ᱛᱟᱹᱞᱤᱢ ᱧᱟᱢ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱵᱮᱵᱚᱦᱟᱨ ᱢᱮ᱾",
+  "Choose the safe action before machinery maintenance.":"ᱢᱮᱥᱤᱱ ᱢᱮᱱᱴᱮᱱᱮᱱᱥ ᱢᱟᱲᱟᱝ ᱥᱩᱨᱚᱠᱪᱷᱟ ᱠᱟᱹᱢᱤ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
+  "Machine or energy-isolation point":"ᱢᱮᱥᱤᱱ ᱥᱮ ᱮᱱᱟᱨᱡᱤ ᱵᱚᱸᱫ ᱴᱷᱟᱶ",
+  "Identify the machine and its hazard area.":"ᱢᱮᱥᱤᱱ ᱟᱨ ᱦᱟᱡᱟᱨᱰ ᱴᱷᱟᱶ ᱪᱤᱱᱦᱟᱹᱯ ᱢᱮ᱾",
+  "Tap the machine or isolation point to mark it.":"ᱢᱮᱥᱤᱱ ᱥᱮ ᱵᱚᱸᱫ ᱴᱷᱟᱶ ᱨᱮ ᱴᱮᱯ ᱢᱮ ᱟᱨ ᱪᱤᱱᱦᱟᱹ ᱢᱮ᱾",
+  "Choose approved isolation before maintenance.":"ᱢᱮᱱᱴᱮᱱᱮᱱᱥ ᱢᱟᱲᱟᱝ ᱟᱹᱫᱮᱥ ᱟᱱᱩᱥᱟᱨ ᱵᱚᱸᱫ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
+  "Approved energy isolation":"ᱟᱹᱫᱮᱥ ᱟᱱᱩᱥᱟᱨ ᱮᱱᱟᱨᱡᱤ ᱵᱚᱸᱫ",
+  "Correct. Isolate, lock and tag the energy source, then verify it is safe before work.":"ᱴᱷᱤᱠ᱾ ᱮᱱᱟᱨᱡᱤ ᱥᱨᱚᱛ ᱵᱚᱸᱫ, ᱞᱚᱠ ᱟᱨ ᱴᱮᱜ ᱢᱮ, ᱛᱟᱭᱚᱢ ᱠᱟᱹᱢᱤ ᱢᱟᱲᱟᱝ ᱥᱩᱨᱚᱠᱪᱷᱟ ᱧᱮᱞ ᱢᱮ᱾",
+  "Leave it running":"ᱟᱱᱚᱞ ᱪᱟᱹᱞᱩ ᱛᱟᱦᱮᱸ",
+  "A running machine can start or move unexpectedly. Stop and isolate it using the approved procedure.":"ᱪᱟᱹᱞᱩ ᱢᱮᱥᱤᱱ ᱟᱪᱠᱟ ᱮᱦᱚᱵ ᱥᱮ ᱦᱟᱞᱤ ᱦᱚᱭᱚᱜᱼᱟ᱾ ᱟᱹᱫᱮᱥ ᱱᱤᱭᱚᱢ ᱟᱱᱩᱥᱟᱨ ᱛᱷᱟᱢ ᱟᱨ ᱵᱚᱸᱫ ᱢᱮ᱾",
+  "Remove machine guards":"ᱢᱮᱥᱤᱱ ᱜᱟᱨᱰ ᱚᱪᱚᱜ",
+  "Guards protect people from moving parts. Never remove them as a substitute for isolation.":"ᱜᱟᱨᱰ ᱦᱟᱞᱤ ᱠᱟᱱ ᱦᱤᱸᱥ ᱠᱷᱚᱱ ᱦᱚᱲ ᱠᱚ ᱵᱟᱹᱪᱟᱣᱟ᱾ ᱵᱚᱸᱫ ᱨᱮᱭᱟᱜ ᱵᱚᱫᱞ ᱜᱟᱨᱰ ᱟᱞᱚᱢ ᱚᱪᱚᱜᱭᱟ᱾",
+  "You identify damaged electrical equipment.":"ᱟᱢ ᱵᱤᱡᱽᱞᱤ ᱵᱟᱹᱲᱤ ᱠᱟᱱ ᱥᱟᱢᱟᱱ ᱧᱮᱞ ᱮᱫᱟᱢ᱾",
+  "Damaged equipment or cable area":"ᱵᱟᱹᱲᱤ ᱥᱟᱢᱟᱱ ᱥᱮ ᱠᱮᱵᱚᱞ ᱴᱷᱟᱶ",
+  "Look for damage from a safe distance.":"ᱥᱩᱨᱚᱠᱪᱷᱟ ᱫᱩᱨᱤ ᱠᱷᱚᱱ ᱵᱟᱹᱲᱤ ᱧᱮᱞ ᱢᱮ᱾",
+  "Tap the area without touching the equipment.":"ᱥᱟᱢᱟᱱ ᱵᱟᱝ ᱛᱷᱟᱵᱤᱡ ᱴᱷᱟᱶ ᱨᱮ ᱴᱮᱯ ᱢᱮ᱾",
+  "Choose the safe isolation and reporting action.":"ᱥᱩᱨᱚᱠᱪᱷᱟ ᱵᱚᱸᱫ ᱟᱨ ᱨᱤᱯᱚᱨᱴ ᱠᱟᱹᱢᱤ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
+  "Isolate and report":"ᱵᱚᱸᱫ ᱢᱮ ᱟᱨ ᱨᱤᱯᱚᱨᱴ ᱢᱮ",
+  "Correct. Keep clear, warn others and report it. Only an authorised person should isolate it.":"ᱴᱷᱤᱠ᱾ ᱫᱩᱨᱤ ᱛᱟᱦᱮᱸ, ᱮᱴᱟᱜ ᱦᱚᱲ ᱠᱚ ᱪᱮᱛᱟᱣ ᱢᱮ ᱟᱨ ᱨᱤᱯᱚᱨᱴ ᱢᱮ᱾ ᱟᱹᱫᱮᱥ ᱧᱟᱢ ᱦᱚᱲ ᱜᱮ ᱵᱚᱸᱫ ᱠᱟᱹᱢᱤ ᱢᱮ᱾",
+  "Touch the cable":"ᱠᱮᱵᱚᱞ ᱛᱷᱟᱵᱤᱡ",
+  "A damaged cable may still be live and can cause a fatal shock. Do not touch it.":"ᱵᱟᱹᱲᱤ ᱠᱮᱵᱚᱞ ᱨᱮ ᱵᱤᱡᱽᱞᱤ ᱛᱟᱦᱮᱸ ᱫᱟᱲᱮᱭᱟ ᱟᱨ ᱡᱤᱣᱤ ᱚᱪᱚᱜ ᱡᱷᱟᱴᱠᱟ ᱮᱢ ᱫᱟᱲᱮᱭᱟ᱾ ᱚᱱᱟ ᱟᱞᱚᱢ ᱛᱷᱟᱵᱤᱡᱭᱟ᱾",
+  "Use water":"ᱫᱟᱜ ᱵᱮᱵᱚᱦᱟᱨ",
+  "Water can conduct electricity and make the danger worse. Keep clear and report the hazard.":"ᱫᱟᱜ ᱵᱤᱡᱽᱞᱤ ᱪᱟᱞᱟᱣ ᱟᱨ ᱦᱟᱡᱟᱨᱰ ᱵᱮᱲᱦᱟᱣ ᱫᱟᱲᱮᱭᱟ᱾ ᱫᱩᱨᱤ ᱛᱟᱦᱮᱸ ᱟᱨ ᱨᱤᱯᱚᱨᱴ ᱢᱮ᱾",
+  "Choose head protection for a falling-object hazard.":"ᱛᱟᱞᱟ ᱠᱷᱚᱱ ᱟᱹᱜᱩ ᱟᱱ ᱥᱟᱢᱟᱱ ᱦᱟᱡᱟᱨᱰ ᱞᱟᱹᱜᱤᱫ ᱢᱩᱸᱰ ᱥᱩᱨᱚᱠᱪᱷᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
+  "Work area where head protection is needed":"ᱢᱩᱸᱰ ᱥᱩᱨᱚᱠᱪᱷᱟ ᱞᱟᱹᱠᱛᱤ ᱠᱟᱹᱢᱤ ᱴᱷᱟᱶ",
+  "Scan the work area for overhead hazards.":"ᱠᱟᱹᱢᱤ ᱴᱷᱟᱶ ᱨᱮ ᱛᱟᱞᱟ ᱠᱷᱚᱱ ᱟᱹᱜᱩ ᱦᱟᱡᱟᱨᱰ ᱧᱮᱞ ᱢᱮ᱾",
+  "Tap the area where head protection is needed.":"ᱚᱠᱟ ᱴᱷᱟᱶ ᱨᱮ ᱢᱩᱸᱰ ᱥᱩᱨᱚᱠᱪᱷᱟ ᱞᱟᱹᱠᱛᱤ, ᱚᱱᱟ ᱴᱷᱟᱶ ᱨᱮ ᱴᱮᱯ ᱢᱮ᱾",
+  "Choose head protection suited to the site rules.":"ᱥᱟᱭᱤᱴ ᱱᱤᱭᱚᱢ ᱟᱱᱩᱥᱟᱨ ᱢᱩᱸᱰ ᱥᱩᱨᱚᱠᱪᱷᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
+  "Safety helmet":"ᱥᱩᱨᱚᱠᱪᱷᱟ ᱦᱮᱞᱢᱮᱴ",
+  "Correct. Wear an approved helmet suited to the site and hazard.":"ᱴᱷᱤᱠ᱾ ᱥᱟᱭᱤᱴ ᱟᱨ ᱦᱟᱡᱟᱨᱰ ᱟᱱᱩᱥᱟᱨ ᱟᱹᱫᱮᱥ ᱧᱟᱢ ᱦᱮᱞᱢᱮᱴ ᱯᱤᱱᱫᱷᱤ ᱢᱮ᱾",
+  "Ear plugs":"ᱠᱟᱱ ᱯᱞᱚᱜ",
+  "Ear plugs protect hearing, not the head. Choose approved head protection for falling objects.":"ᱠᱟᱱ ᱯᱞᱚᱜ ᱟᱨᱚᱝ ᱵᱟᱹᱪᱟᱣᱟ, ᱢᱩᱸᱰ ᱵᱟᱝ᱾ ᱟᱹᱜᱩ ᱥᱟᱢᱟᱱ ᱦᱟᱡᱟᱨᱰ ᱞᱟᱹᱜᱤᱫ ᱟᱹᱫᱮᱥ ᱦᱮᱞᱢᱮᱴ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
+  "Gloves only":"ᱮᱠᱮᱱ ᱜᱞᱟᱵᱷᱥ",
+  "Gloves protect hands, not the head. Wear the required helmet as well.":"ᱜᱞᱟᱵᱷᱥ ᱛᱤ ᱵᱟᱹᱪᱟᱣᱟ, ᱢᱩᱸᱰ ᱵᱟᱝ᱾ ᱞᱟᱹᱠᱛᱤ ᱦᱮᱞᱢᱮᱴ ᱦᱚᱸ ᱯᱤᱱᱫᱷᱤ ᱢᱮ᱾"
+};
+
+const getText=(value,lang)=>{
+  if(!value||typeof value!=="object")return value;
+  if(lang==="sat")return santaliExerciseText[value.en]||"ᱵᱚᱫᱚᱞ ᱵᱟᱹᱝ ᱧᱟᱢᱚᱜᱼᱟ";
+  return value[lang]||value.en;
+};
+
+const interfaceText={
+  speechUnavailable:{en:"Speech is not available in this browser.",hi:"इस ब्राउज़र में आवाज़ उपलब्ध नहीं है।",sat:"ᱱᱚᱣᱟ ᱵᱨᱟᱣᱡᱚᱨ ᱨᱮ ᱟᱨᱚᱝ ᱥᱮᱵᱟ ᱵᱟᱝ ᱢᱮᱱᱟᱜᱼᱟ᱾"},
+  cameraPermission:{en:"Camera permission unavailable. You can still complete the interactive simulation.",hi:"कैमरा अनुमति उपलब्ध नहीं है। आप फिर भी यह अभ्यास पूरा कर सकते हैं।",sat:"ᱠᱮᱢᱨᱟ ᱟᱹᱫᱮᱥ ᱵᱟᱝ ᱧᱟᱢᱚᱜᱼᱟ᱾ ᱟᱢ ᱱᱚᱣᱟ ᱤᱱᱴᱟᱨᱮᱠᱴᱤᱵ ᱥᱤᱢᱩᱞᱮᱥᱚᱱ ᱯᱩᱨᱟᱹ ᱦᱚᱪᱚ ᱞᱮᱠᱟᱜᱼᱟ᱾"},
+  detectorIdle:{en:"Object detection starts with the camera.",hi:"कैमरा चालू होने पर वस्तु पहचान शुरू होगी।",sat:"ᱠᱮᱢᱨᱟ ᱪᱟᱹᱞᱩ ᱚᱠᱛᱚ ᱥᱟᱢᱟᱱ ᱪᱤᱱᱦᱟᱹᱯ ᱮᱦᱚᱵᱚᱜᱼᱟ᱾"},
+  detectorLoading:{en:"Loading object detection model...",hi:"वस्तु पहचान मॉडल लोड हो रहा है...",sat:"ᱥᱟᱢᱟᱱ ᱪᱤᱱᱦᱟᱹᱯ ᱢᱚᱰᱮᱞ ᱞᱳᱰ ᱦᱚᱭᱚᱜ..."},
+  detectorActive:{en:"Common objects only; hazards are not identified.",hi:"सामान्य वस्तुएँ ही पहचानी जाती हैं, खतरे नहीं।",sat:"ᱥᱟᱫᱷᱟᱨᱚᱱ ᱥᱟᱢᱟᱱ ᱜᱮ ᱪᱤᱱᱦᱟᱹᱯᱚᱜᱼᱟ; ᱦᱟᱡᱟᱨᱰ ᱵᱟᱝ᱾"},
+  detectorStopped:{en:"Object detection stopped. Camera training is still available.",hi:"वस्तु पहचान रुक गई। कैमरा अभ्यास जारी रख सकते हैं।",sat:"ᱥᱟᱢᱟᱱ ᱪᱤᱱᱦᱟᱹᱯ ᱛᱷᱟᱢ ᱮᱱᱟ᱾ ᱠᱮᱢᱨᱟ ᱯᱨᱚᱥᱤᱠᱠᱷᱚᱱ ᱟᱨᱦᱚᱸ ᱢᱮᱱᱟᱜᱼᱟ᱾"},
+  detectorFailed:{en:"Object detection could not load. Camera training is still available.",hi:"वस्तु पहचान लोड नहीं हुई। कैमरा अभ्यास जारी रख सकते हैं।",sat:"ᱥᱟᱢᱟᱱ ᱪᱤᱱᱦᱟᱹᱯ ᱞᱳᱰ ᱵᱟᱝ ᱦᱚᱭ ᱞᱮᱱᱟ᱾ ᱠᱮᱢᱨᱟ ᱯᱨᱚᱥᱤᱠᱠᱷᱚᱱ ᱟᱨᱦᱚᱸ ᱢᱮᱱᱟᱜᱼᱟ᱾"},
+  cameraPractical:{en:"Camera-assisted practical",hi:"कैमरे के साथ व्यावहारिक अभ्यास",sat:"ᱠᱮᱢᱨᱟ ᱥᱟᱶ ᱠᱟᱹᱢᱤ ᱥᱤᱠᱟᱹᱣ"},
+  cameraPrivacy:{en:"Video is processed on this device. MediaPipe may send usage metrics; camera frames are not sent to its servers.",hi:"वीडियो इसी डिवाइस पर प्रोसेस होता है। MediaPipe उपयोग के आँकड़े भेज सकता है; कैमरे के फ़्रेम उसके सर्वर पर नहीं भेजे जाते।",sat:"ᱱᱚᱣᱟ ᱰᱤᱵᱷᱟᱭᱤᱥ ᱨᱮ ᱵᱷᱤᱰᱤᱭᱳ ᱯᱨᱚᱥᱮᱥ ᱦᱚᱭᱚᱜᱼᱟ᱾ MediaPipe ᱵᱮᱵᱚᱦᱟᱨ ᱢᱮᱴᱨᱤᱠᱥ ᱠᱩᱞ ᱫᱟᱲᱮᱭᱟ; ᱠᱮᱢᱨᱟ ᱯᱷᱨᱮᱢ ᱥᱟᱨᱵᱷᱟᱨ ᱨᱮ ᱵᱟᱝ ᱠᱩᱞᱚᱜᱼᱟ᱾"},
+  enableCamera:{en:"Enable Camera",hi:"कैमरा चालू करें",sat:"ᱠᱮᱢᱨᱟ ᱪᱟᱹᱞᱩ ᱢᱮ"},
+  mark:{en:"Mark",hi:"निशान लगाएँ",sat:"ᱪᱤᱱᱦᱟᱹ ᱢᱮ"},
+  trainingMarked:{en:"Training point marked. Tap again to reposition.",hi:"ट्रेनिंग पॉइंट लग गया। जगह बदलने के लिए फिर टैप करें।",sat:"ᱯᱨᱚᱥᱤᱠᱠᱷᱚᱱ ᱴᱷᱟᱶ ᱪᱤᱱᱦᱟᱹ ᱮᱱᱟ᱾ ᱴᱷᱟᱶ ᱵᱚᱫᱚᱞ ᱞᱟᱹᱜᱤᱫ ᱫᱚᱦᱲᱟ ᱴᱮᱯ ᱢᱮ᱾"},
+  tapToMark:{en:"Tap the view to mark:",hi:"जगह पर निशान लगाने के लिए टैप करें:",sat:"ᱪᱤᱱᱦᱟᱹ ᱞᱟᱹᱜᱤᱫ ᱴᱷᱟᱶ ᱨᱮ ᱴᱮᱯ ᱢᱮ:"},
+  headsetFree:{en:"HEADSET-FREE CAMERA AR",hi:"बिना हेडसेट कैमरा AR",sat:"ᱦᱮᱰᱥᱮᱴ ᱵᱮᱜᱚᱨ ᱠᱮᱢᱨᱟ AR"},
+  practicalTask:{en:"PRACTICAL SAFETY TASK",hi:"व्यावहारिक सुरक्षा अभ्यास",sat:"ᱠᱟᱹᱢᱤ ᱥᱩᱨᱚᱠᱪᱷᱟ ᱥᱤᱠᱟᱹᱣ"},
+  readGuidance:{en:"Read guidance aloud",hi:"निर्देश सुनें",sat:"ᱱᱤᱨᱫᱮᱥ ᱟᱨᱚᱝ ᱛᱮ ᱟᱸᱡᱚᱢ"},
+  listen:{en:"Listen",hi:"सुनें",sat:"ᱟᱸᱡᱚᱢ"},
+  tapLiveView:{en:"Tap the live camera view to mark the relevant area, then choose the safest response. No headset required.",hi:"कैमरा दृश्य में संबंधित जगह पर निशान लगाएँ, फिर सबसे सुरक्षित कदम चुनें। AR हेडसेट की जरूरत नहीं।",sat:"ᱠᱮᱢᱨᱟ ᱧᱮᱞ ᱨᱮ ᱥᱚᱢᱵᱚᱱᱫᱷ ᱴᱷᱟᱶ ᱪᱤᱱᱦᱟᱹ ᱢᱮ, ᱛᱟᱭᱚᱢ ᱥᱟᱵᱟᱛ ᱡᱚᱵᱟᱵ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾ AR ᱦᱮᱰᱥᱮᱴ ᱵᱟᱝ ᱞᱟᱹᱠᱛᱤᱭᱟ᱾"},
+  pointPlaced:{en:"Training point placed on the camera view",hi:"कैमरा दृश्य में ट्रेनिंग पॉइंट लगाया गया",sat:"ᱠᱮᱢᱨᱟ ᱧᱮᱞ ᱨᱮ ᱯᱨᱚᱥᱤᱠᱠᱷᱚᱱ ᱴᱷᱟᱶ ᱞᱟᱜᱟᱣ ᱮᱱᱟ"},
+  trainingSteps:{en:"Training steps",hi:"ट्रेनिंग के चरण",sat:"ᱯᱨᱚᱥᱤᱠᱠᱷᱚᱱ ᱫᱷᱟᱯ"},
+  continueAssessment:{en:"Continue to Assessment",hi:"मूल्यांकन जारी रखें",sat:"ᱢᱩᱞᱭᱟᱝᱠᱚᱱ ᱞᱟᱦᱟ ᱪᱟᱞᱟᱣ"},
+  detectedObject:{en:"Detected object",hi:"पहचानी गई वस्तु",sat:"ᱪᱤᱱᱦᱟᱹ ᱟᱠᱟᱱ ᱥᱟᱢᱟᱱ"},
+  back:{en:"Back",hi:"वापस",sat:"ᱨᱩᱣᱟᱹᱲ"},
+  unavailable:{en:"Translation unavailable",hi:"अनुवाद उपलब्ध नहीं है",sat:"ᱵᱚᱫᱚᱞ ᱵᱟᱹᱝ ᱧᱟᱢᱚᱜᱼᱟ"}
+};
 
 export default function ARTraining(){
   const {id}=useParams();
@@ -121,7 +210,7 @@ export default function ARTraining(){
   const [voiceError,setVoiceError]=useState("");
 
   const text=value=>getText(value,lang);
-  const ui=(en,hi)=>lang==="hi"?hi:en;
+  const ui=key=>interfaceText[key]?.[lang]||interfaceText.unavailable[lang];
 
   function markCameraView(event){
     if(!camera) return;
@@ -135,17 +224,13 @@ export default function ARTraining(){
 
   function speak(content){
     if(!window.speechSynthesis||!window.SpeechSynthesisUtterance){
-      setVoiceError(
-        lang==="hi"
-          ?"इस ब्राउज़र में आवाज़ उपलब्ध नहीं है।"
-          :"Speech is not available in this browser."
-      );
+      setVoiceError(ui("speechUnavailable"));
       return;
     }
 
     window.speechSynthesis.cancel();
     const utterance=new SpeechSynthesisUtterance(content);
-    utterance.lang=lang==="hi"?"hi-IN":"en-IN";
+    utterance.lang=lang==="sat"?"sat-IN":lang==="hi"?"hi-IN":"en-IN";
     window.speechSynthesis.speak(utterance);
     setVoiceError("");
   }
@@ -182,12 +267,7 @@ export default function ARTraining(){
 
       setCamera(true);
     }catch{
-      setMessage(
-        ui(
-          "Camera permission unavailable. You can still complete the interactive simulation.",
-          "कैमरा अनुमति उपलब्ध नहीं है। आप फिर भी यह अभ्यास पूरा कर सकते हैं।"
-        )
-      );
+      setMessage(ui("cameraPermission"));
     }
   }
 
@@ -282,7 +362,7 @@ export default function ARTraining(){
                 const category=item.categories?.[0];
                 return [{
                   id:`${category?.categoryName||"object"}-${index}`,
-                  label:category?.displayName||category?.categoryName||"Object",
+                  label:ui("detectedObject"),
                   score:category?.score||0,
                   left:(offsetX+box.originX*scale)/stageWidth*100,
                   top:(offsetY+box.originY*scale)/stageHeight*100,
@@ -325,11 +405,11 @@ export default function ARTraining(){
     ?exercise.steps.length
     :!camera?0:!marker?1:2;
   const detectorStatusText={
-    idle:ui("Object detection starts with the camera.","कैमरा चालू होने पर वस्तु पहचान शुरू होगी।"),
-    loading:ui("Loading object detection model...","वस्तु पहचान मॉडल लोड हो रहा है..."),
-    active:ui("Common objects only; hazards are not identified.","सामान्य वस्तुएँ ही पहचानी जाती हैं, खतरे नहीं।"),
-    stopped:ui("Object detection stopped. Camera training is still available.","वस्तु पहचान रुक गई। कैमरा ट्रेनिंग जारी रख सकते हैं।"),
-    failed:ui("Object detection could not load. Camera training is still available.","वस्तु पहचान लोड नहीं हुई। कैमरा ट्रेनिंग जारी रख सकते हैं।")
+    idle:ui("detectorIdle"),
+    loading:ui("detectorLoading"),
+    active:ui("detectorActive"),
+    stopped:ui("detectorStopped"),
+    failed:ui("detectorFailed")
   }[detectorStatus];
 
   return (
@@ -342,7 +422,7 @@ export default function ARTraining(){
           onClick={()=>nav(`/worker/module/${id}`)}
         >
           <ArrowLeft/>
-          Back
+          {ui("back")}
         </button>
 
         <div className="ar-layout">
@@ -361,13 +441,10 @@ export default function ARTraining(){
               <div className="camera-placeholder">
                 <Camera size={45}/>
                 <h2>
-                  {ui("Camera-assisted practical","कैमरा के साथ व्यावहारिक अभ्यास")}
+                  {ui("cameraPractical")}
                 </h2>
                 <p className="ar-camera-privacy">
-                  {ui(
-                    "Video is processed on this device. MediaPipe may send usage metrics; camera frames are not sent to its servers.",
-                    "वीडियो इसी डिवाइस पर प्रोसेस होता है। MediaPipe उपयोग के आँकड़े भेज सकता है; कैमरे के फ़्रेम उसके सर्वर पर नहीं भेजे जाते।"
-                  )}
+                  {ui("cameraPrivacy")}
                 </p>
 
                 <button
@@ -375,7 +452,7 @@ export default function ARTraining(){
                   onClick={startCamera}
                 >
                   <Camera/>
-                  {ui("Enable Camera","कैमरा चालू करें")}
+                  {ui("enableCamera")}
                 </button>
               </div>
             )}
@@ -385,7 +462,7 @@ export default function ARTraining(){
                 <button
                   type="button"
                   className="ar-tap-layer"
-                  aria-label={`${ui("Mark","निशान लगाएँ")}: ${text(exercise.target)}`}
+                  aria-label={`${ui("mark")}: ${text(exercise.target)}`}
                   onClick={markCameraView}
                 />
                 <div
@@ -413,8 +490,8 @@ export default function ARTraining(){
                 ))}
                 <div className="ar-camera-hint">
                   {marker
-                    ?ui("Training point marked. Tap again to reposition.","ट्रेनिंग पॉइंट लग गया। जगह बदलने के लिए फिर टैप करें।")
-                    :`${ui("Tap the view to mark:","जगह पर निशान लगाने के लिए टैप करें:")} ${text(exercise.target)}`}
+                    ?ui("trainingMarked")
+                    :`${ui("tapToMark")} ${text(exercise.target)}`}
                 </div>
                 <div className="ar-detector-status" aria-live="polite">
                   {detectorStatusText}
@@ -424,41 +501,38 @@ export default function ARTraining(){
 
             <div className="ar-label">
               <span>{module?.icon} {text(module?.title)}</span>
-              <small>{ui("HEADSET-FREE CAMERA AR","बिना हेडसेट कैमरा AR")}</small>
+              <small>{ui("headsetFree")}</small>
             </div>
           </section>
 
           <section className="panel ar-task">
             <div className="ar-task-heading">
               <div>
-                <span>{ui("PRACTICAL SAFETY TASK","व्यावहारिक सुरक्षा अभ्यास")}</span>
+                <span>{ui("practicalTask")}</span>
                 <h2>{text(exercise.prompt)}</h2>
               </div>
               <button
                 className="ar-read-button"
                 onClick={readGuidance}
-                title={ui("Read guidance aloud","निर्देश सुनें")}
+                title={ui("readGuidance")}
               >
                 <Volume2 size={18}/>
-                {ui("Listen","सुनें")}
+                {ui("listen")}
               </button>
             </div>
 
             <p>
-              {ui(
-                "Tap the live camera view to mark the relevant area, then choose the safest response. No headset required.",
-                "कैमरा दृश्य में संबंधित जगह पर निशान लगाएँ, फिर सबसे सुरक्षित कदम चुनें। AR हेडसेट की जरूरत नहीं।"
-              )}
+              {ui("tapLiveView")}
             </p>
 
             {marker&&(
               <div className="ar-marked-note">
                 <MapPin size={17}/>
-                {ui("Training point placed on the camera view","कैमरा दृश्य में ट्रेनिंग पॉइंट लगाया गया")}
+                {ui("pointPlaced")}
               </div>
             )}
 
-            <ol className="ar-steps" aria-label={ui("Training steps","ट्रेनिंग के चरण")}>
+            <ol className="ar-steps" aria-label={ui("trainingSteps")}>
               {exercise.steps.map((step,index)=>(
                 <li
                   key={step.en}
@@ -515,7 +589,7 @@ export default function ARTraining(){
                   )
                 }
               >
-                {ui("Continue to Assessment","मूल्यांकन जारी रखें")}
+                {ui("continueAssessment")}
               </button>
             )}
           </section>

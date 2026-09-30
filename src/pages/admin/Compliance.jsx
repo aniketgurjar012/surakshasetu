@@ -12,8 +12,10 @@ import AdminHeader from "../../components/admin/AdminHeader";
 import AdminStatCard from "../../components/admin/AdminStatCard";
 import {modules} from "../../data/modules";
 import {supabase} from "../../lib/supabase";
+import {useApp} from "../../context/AppContext";
 
 export default function Compliance(){
+  const {lang,t}=useApp();
   const [workers,setWorkers]=useState([]);
   const [tests,setTests]=useState([]);
   const [certs,setCerts]=useState([]);
@@ -62,35 +64,35 @@ export default function Compliance(){
 
       <main className="admin-shell">
         <AdminHeader
-          eyebrow="COMPLIANCE ANALYTICS"
-          title="Safety Compliance Overview"
-          description="Platform-wide training and certification performance."
+          eyebrow={t("compliance").toUpperCase()}
+          title={t("safetyCompliance")}
+          description={t("complianceDescription")}
         />
 
         <section className="admin-stat-grid">
           <AdminStatCard
             icon={<Users/>}
-            label="Total Workers"
+            label={t("totalWorkers")}
             value={workers.length}
           />
 
           <AdminStatCard
             icon={<ClipboardCheck/>}
-            label="Assessments"
+            label={t("assessments")}
             value={tests.length}
             color="blue"
           />
 
           <AdminStatCard
             icon={<Award/>}
-            label="Certificates"
+            label={t("certificates")}
             value={certs.length}
             color="gold"
           />
 
           <AdminStatCard
             icon={<BarChart3/>}
-            label="Average Score"
+            label={t("averageScore")}
             value={`${average}%`}
             color="purple"
           />
@@ -99,9 +101,9 @@ export default function Compliance(){
         <section className="admin-panel">
           <div className="admin-panel-title">
             <div>
-              <span>MODULE PERFORMANCE</span>
+              <span>{t("modulePerformance").toUpperCase()}</span>
               <h2>
-                Module-wise assessments
+                {t("moduleAssessments")}
               </h2>
             </div>
           </div>
@@ -134,7 +136,7 @@ export default function Compliance(){
                   <div>
                     <span>{module.icon}</span>
                     <strong>
-                      {module.title.en}
+                      {module.title[lang]||module.title.en}
                     </strong>
                   </div>
 

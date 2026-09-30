@@ -10,8 +10,11 @@ import Navbar from "../../components/Navbar";
 import AdminHeader from "../../components/admin/AdminHeader";
 import AdminEmptyState from "../../components/admin/AdminEmptyState";
 import {supabase} from "../../lib/supabase";
+import {useApp} from "../../context/AppContext";
+import {getModule} from "../../data/modules";
 
 export default function Assessments(){
+  const {lang,t,formatDateTime}=useApp();
   const nav=useNavigate();
 
   const [rows,setRows]=useState([]);
@@ -72,7 +75,7 @@ export default function Assessments(){
 
   async function remove(id){
     if(!confirm(
-      "Remove this assessment from Admin records?"
+      t("assessmentDeleteConfirm")
     ))return;
 
     const {error}=await supabase
@@ -94,9 +97,9 @@ export default function Assessments(){
 
       <main className="admin-shell">
         <AdminHeader
-          eyebrow="ASSESSMENT RECORDS"
-          title="Assessment History"
-          description="Worker-side history removal does not remove these compliance records."
+          eyebrow={t("assessmentRecords").toUpperCase()}
+          title={t("assessmentHistory")}
+          description={t("workerHistoryAdminNote")}
         />
 
         <div className="admin-search">
@@ -105,26 +108,26 @@ export default function Assessments(){
           <input
             value={search}
             onChange={e=>setSearch(e.target.value)}
-            placeholder="Search worker name, ID or module..."
+            placeholder={t("searchWorker")}
           />
         </div>
 
         <section className="admin-panel">
           {!filtered.length?(
             <AdminEmptyState
-              text="No assessment records."
+              text={t("noAssessments")}
             />
           ):(
             <div className="admin-table-wrap">
               <table className="admin-table">
                 <thead>
                   <tr>
-                    <th>Worker</th>
-                    <th>Worker ID</th>
-                    <th>Module</th>
-                    <th>Score</th>
-                    <th>Date</th>
-                    <th>Actions</th>
+                    <th>{t("worker")}</th>
+                    <th>{t("workerId")}</th>
+                    <th>{t("module")}</th>
+                    <th>{t("score")}</th>
+                    <th>{t("date")}</th>
+                    <th>{t("actions")}</th>
                   </tr>
                 </thead>
 
@@ -136,7 +139,7 @@ export default function Assessments(){
                     return (
                       <tr key={row.id}>
                         <td>
-                          {worker?.name||"Unknown"}
+                          {worker?.name||t("user")}
                         </td>
 
                         <td>
@@ -144,7 +147,7 @@ export default function Assessments(){
                         </td>
 
                         <td>
-                          {row.module_id}
+                          {getModule(row.module_id)?.title?.[lang]||row.module_id}
                         </td>
 
                         <td>
@@ -162,15 +165,15 @@ export default function Assessments(){
                         </td>
 
                         <td>
-                          {new Date(
-                            row.created_at
-                          ).toLocaleString()}
+                          {formatDateTime(row.created_at)}
                         </td>
 
                         <td>
                           <div className="admin-row-actions">
                             <button
                               className="admin-icon"
+                              title={t("view")}
+                              aria-label={t("view")}
                               onClick={()=>
                                 nav(
                                   `/admin/assessments/${row.id}`
@@ -182,6 +185,8 @@ export default function Assessments(){
 
                             <button
                               className="admin-icon danger"
+                              title={t("remove")}
+                              aria-label={t("remove")}
                               onClick={()=>remove(row.id)}
                             >
                               <Trash2/>

@@ -17,7 +17,7 @@ import {getModule} from "../../data/modules";
 export default function Result(){
   const {submissionId}=useParams();
   const nav=useNavigate();
-  const {lang}=useApp();
+  const {lang,t}=useApp();
 
   const [submission,setSubmission]=useState(null);
   const [review,setReview]=useState(null);
@@ -54,13 +54,13 @@ export default function Result(){
   const passed=
     Number(submission.percentage)>=60;
 
-  function localizedOptions(q){
-    if(lang==="hi"&&q.options_hi?.length){
-      return q.options_hi;
+  function localizedOptions(q,language=lang){
+    if(language==="hi"){
+      return q.options_hi||[];
     }
 
-    if(lang==="sat"&&q.options_sat?.length){
-      return q.options_sat;
+    if(language==="sat"){
+      return q.options_sat||[];
     }
 
     return q.options_en||[];
@@ -76,7 +76,7 @@ export default function Result(){
           onClick={()=>nav("/worker")}
         >
           <ArrowLeft/>
-          Dashboard
+          {t("dashboardBack")}
         </button>
 
         <section className="result-hero panel">
@@ -84,7 +84,7 @@ export default function Result(){
             ?<CheckCircle2 className="result-pass"/>
             :<XCircle className="result-fail"/>}
 
-          <span>ASSESSMENT RESULT</span>
+          <span>{t("assessmentResult").toUpperCase()}</span>
 
           <h1>
             {module?.title?.[lang]||
@@ -106,8 +106,8 @@ export default function Result(){
 
           <h2>
             {passed
-              ?"Assessment completed"
-              :"Review the module and try again"}
+              ?t("assessmentCompleted")
+              :t("reviewAndRetry")}
           </h2>
 
           {passed&&(
@@ -120,7 +120,7 @@ export default function Result(){
               }
             >
               <Award/>
-              Generate Certificate
+              {t("generateCertificate")}
             </button>
           )}
         </section>
@@ -129,9 +129,9 @@ export default function Result(){
           <section className="review-section">
             <div className="title-row">
               <div>
-                <span>ANSWER REVIEW</span>
+                <span>{t("answerReview").toUpperCase()}</span>
                 <h2>
-                  Correct answers
+                  {t("correctAnswers")}
                 </h2>
               </div>
             </div>
@@ -150,8 +150,9 @@ export default function Result(){
                 const correct=
                   localized[correctIndex];
 
-                const selected=
-                  review.answers[q.id];
+                const sourceOptions=localizedOptions(q,review.lang||lang);
+                const selectedIndex=sourceOptions.indexOf(review.answers[q.id]);
+                const selected=localizedOptions(q,lang)[selectedIndex]||t("translationUnavailable");
 
                 const isCorrect=
                   selected===correct;
@@ -168,7 +169,7 @@ export default function Result(){
                     key={q.id}
                   >
                     <span>
-                      Question {index+1}
+                      {t("question")} {index+1}
                     </span>
 
                     <h3>
@@ -176,20 +177,19 @@ export default function Result(){
                         ?q.question_hi||
                          q.question_en
                         :lang==="sat"
-                          ?q.question_sat||
-                           q.question_en
-                          :q.question_en}
+                          ?q.question_sat||t("translationUnavailable")
+                          :q.question_en||t("translationUnavailable")}
                     </h3>
 
                     <p>
-                      Your answer:
+                      {t("yourAnswer")}
                       {" "}
                       <b>{selected}</b>
                     </p>
 
                     {!isCorrect&&(
                       <p>
-                        Correct answer:
+                        {t("correctAnswer")}
                         {" "}
                         <b>{correct}</b>
                       </p>
@@ -201,8 +201,8 @@ export default function Result(){
                         :<XCircle/>}
                       {
                         isCorrect
-                          ?"Correct"
-                          :"Incorrect"
+                          ?t("correct")
+                          :t("incorrect")
                       }
                     </div>
                   </article>

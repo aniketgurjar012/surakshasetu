@@ -15,6 +15,7 @@ import Navbar from "../../components/Navbar";
 import AdminStatCard from "../../components/admin/AdminStatCard";
 import {useApp} from "../../context/AppContext";
 import {supabase} from "../../lib/supabase";
+import {getModule} from "../../data/modules";
 
 const words={
   en:{
@@ -91,7 +92,7 @@ const words={
 };
 
 export default function AdminDashboard(){
-  const {profile,lang}=useApp();
+  const {profile,lang,t,formatDateTime}=useApp();
   const nav=useNavigate();
   const w=words[lang]||words.en;
 
@@ -280,14 +281,14 @@ export default function AdminDashboard(){
         <section className="admin-panel">
           <div className="admin-panel-title">
             <div>
-              <span>LIVE ACTIVITY</span>
+              <span>{t("liveActivity").toUpperCase()}</span>
               <h2>{w.recent}</h2>
             </div>
           </div>
 
           {!tests.length&&(
             <div className="admin-empty">
-              No assessments yet.
+              {t("noAssessmentsYet")}
             </div>
           )}
 
@@ -302,11 +303,9 @@ export default function AdminDashboard(){
               <ClipboardCheck/>
 
               <div>
-                <strong>{test.module_id}</strong>
+                <strong>{getModule(test.module_id)?.title?.[lang]||getModule(test.module_id)?.title?.en||test.module_id}</strong>
                 <small>
-                  {new Date(
-                    test.created_at
-                  ).toLocaleString()}
+                  {formatDateTime(test.created_at)}
                 </small>
               </div>
 

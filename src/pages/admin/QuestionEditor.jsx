@@ -11,8 +11,15 @@ import {
 
 import Navbar from "../../components/Navbar";
 import AdminHeader from "../../components/admin/AdminHeader";
+import {useApp} from "../../context/AppContext";
 import {modules} from "../../data/modules";
 import {supabase} from "../../lib/supabase";
+
+const typeLabels={
+  en:{mcq:"Multiple choice",scenario:"Scenario",image:"Image + MCQ",true_false:"True / False",option:"Option"},
+  hi:{mcq:"बहुविकल्पीय",scenario:"परिदृश्य",image:"चित्र + बहुविकल्पीय",true_false:"सही / गलत",option:"विकल्प"},
+  sat:{mcq:"ᱟᱹᱰᱤ ᱡᱚᱵᱟᱵ ᱵᱟᱪᱷᱟᱣ",scenario:"ᱥᱤᱢᱩᱞᱮᱥᱚᱱ",image:"ᱪᱤᱛᱟᱹᱨ + ᱡᱚᱵᱟᱵ ᱵᱟᱪᱷᱟᱣ",true_false:"ᱥᱟᱹᱨᱤ / ᱵᱟᱝ ᱥᱟᱹᱨᱤ",option:"ᱵᱟᱪᱷᱟᱣ"}
+};
 
 const blank={
   module_id:"fire",
@@ -37,6 +44,8 @@ const blank={
 };
 
 export default function QuestionEditor(){
+  const {lang,t}=useApp();
+  const labels=typeLabels[lang]||typeLabels.en;
   const {id}=useParams();
   const [params]=useSearchParams();
   const nav=useNavigate();
@@ -113,19 +122,24 @@ export default function QuestionEditor(){
   async function save(e){
     e.preventDefault();
 
-    if(!form.question_en.trim()){
-      alert("English question is required.");
+    if(!form.question_en.trim()||!form.question_hi.trim()||!form.question_sat.trim()){
+      alert(t("questionTranslationRequired"));
       return;
     }
 
-    if(
-      !form.options_en[
-        form.correctIndex
-      ]?.trim()
-    ){
-      alert(
-        "The selected correct answer cannot be empty."
-      );
+    const optionsComplete=form.options_en.every((_,index)=>{
+      const values=["en","hi","sat"].map(code=>form[`options_${code}`][index]?.trim()||"");
+      return values.every(value=>!value)||values.every(Boolean);
+    });
+    const explanations=["en","hi","sat"].map(code=>form[`explanation_${code}`]?.trim()||"");
+    const explanationsComplete=explanations.every(value=>!value)||explanations.every(Boolean);
+    if(!optionsComplete||!explanationsComplete){
+      alert(t("optionsTranslationRequired"));
+      return;
+    }
+
+    if(["en","hi","sat"].some(code=>!form[`options_${code}`][form.correctIndex]?.trim())){
+      alert(t("selectedAnswerRequired"));
       return;
     }
 
@@ -193,7 +207,7 @@ export default function QuestionEditor(){
   async function remove(){
     if(!editing)return;
 
-    if(!confirm("Delete this question?")){
+    if(!confirm(t("questionDeleteConfirm"))){
       return;
     }
 
@@ -216,13 +230,13 @@ export default function QuestionEditor(){
 
       <main className="admin-shell">
         <AdminHeader
-          eyebrow="QUESTION EDITOR"
+          eyebrow={t("questionEditor").toUpperCase()}
           title={
             editing
-              ?"Edit Question"
-              :"Add Question"
+              ?t("editQuestion")
+              :t("addQuestion")
           }
-          description="Maintain the English, Hindi and Santali versions together."
+          description={t("regionalLanguagesDesc")}
         />
 
         <form
@@ -232,7 +246,7 @@ export default function QuestionEditor(){
           <section className="admin-panel">
             <div className="admin-form-grid">
               <label>
-                Module
+                {t("module")}
 
                 <select
                   value={form.module_id}
@@ -248,14 +262,14 @@ export default function QuestionEditor(){
                       key={module.id}
                       value={module.id}
                     >
-                      {module.title.en}
+                      {module.title[lang]||module.title.en}
                     </option>
                   ))}
                 </select>
               </label>
 
               <label>
-                Question Type
+                {t("questionType")}
 
                 <select
                   value={form.type}
@@ -267,22 +281,22 @@ export default function QuestionEditor(){
                   }
                 >
                   <option value="mcq">
-                    MCQ
+                    {labels.mcq}
                   </option>
                   <option value="scenario">
-                    Scenario
+                    {labels.scenario}
                   </option>
                   <option value="image">
-                    Image + MCQ
+                    {labels.image}
                   </option>
                   <option value="true_false">
-                    True / False
+                    {labels.true_false}
                   </option>
                 </select>
               </label>
 
               <label>
-                Sort Order
+                {t("sortOrder")}
 
                 <input
                   type="number"
@@ -297,7 +311,7 @@ export default function QuestionEditor(){
               </label>
 
               <label>
-                Image URL (optional)
+                {t("imageOptional")}
 
                 <input
                   value={form.media_url||""}
@@ -325,7 +339,7 @@ export default function QuestionEditor(){
               <h2>{name}</h2>
 
               <label>
-                Question
+                {t("question")}
 
                 <textarea
                   required={code==="en"}
@@ -379,20 +393,14 @@ export default function QuestionEditor(){
                           e.target.value
                         )
                       }
-                      placeholder={
-                        `Option ${
-                          String.fromCharCode(
-                            65+index
-                          )
-                        }`
-                      }
+                      placeholder={`${labels.option} ${String.fromCharCode(65+index)}`}
                     />
                   </label>
                 ))}
               </div>
 
               <label>
-                Explanation
+                {t("explanation")}
 
                 <textarea
                   rows="2"
@@ -421,7 +429,7 @@ export default function QuestionEditor(){
                 onClick={remove}
               >
                 <Trash2/>
-                Delete
+                {t("delete")}
               </button>
             )}
 
@@ -431,9 +439,7 @@ export default function QuestionEditor(){
             >
               <Save/>
 
-              {busy
-                ?"Saving..."
-                :"Save Question"}
+              {busy?t("pleaseWait"):t("save")}
             </button>
           </div>
         </form>

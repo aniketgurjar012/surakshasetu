@@ -21,7 +21,7 @@ export default function Assessment(){
   const {id}=useParams();
   const nav=useNavigate();
 
-  const {profile,lang}=useApp();
+  const {profile,lang,t}=useApp();
   const module=getModule(id);
 
   const [questions,setQuestions]=useState([]);
@@ -78,16 +78,29 @@ export default function Assessment(){
       questions.every(q=>answers[q.id]),
     [questions,answers]
   );
+  const translationsComplete=questions.every(q=>
+    q.question_en?.trim()&&
+    q.question_hi?.trim()&&
+    q.question_sat?.trim()&&
+    (q.options_en||[]).every((option,index)=>
+      !option?.trim()||Boolean(
+        q.options_hi?.[index]?.trim()&&
+        q.options_sat?.[index]?.trim()
+      )
+    )&&
+    (!q.explanation_en?.trim()||Boolean(
+      q.explanation_hi?.trim()&&
+      q.explanation_sat?.trim()
+    ))
+  );
 
   function text(q,type){
     if(lang==="hi"){
-      return q[`${type}_hi`]||
-             q[`${type}_en`];
+      return q[`${type}_hi`]||t("translationUnavailable");
     }
 
     if(lang==="sat"){
-      return q[`${type}_sat`]||
-             q[`${type}_en`];
+      return q[`${type}_sat`]||t("translationUnavailable");
     }
 
     return q[`${type}_en`];
@@ -196,7 +209,7 @@ export default function Assessment(){
             }
           >
             <ArrowLeft/>
-            Back
+            {t("backToDashboard")}
           </button>
 
           <section className="assessment-intro panel">
@@ -207,33 +220,29 @@ export default function Assessment(){
                module?.title?.en}
             </h1>
 
-            <h2>Assessment</h2>
+            <h2>{t("assessment")}</h2>
 
             <p>
-              {questions.length} questions.
-              Complete all questions before
-              submitting.
+              {questions.length} {t("questions").toLowerCase()}. {t("completeAllQuestions")}
             </p>
 
             <div className="assessment-warning">
               <AlertTriangle/>
-              Switching tabs/apps while the
-              assessment is active will invalidate
-              this attempt in the web experience.
-              It will not be submitted.
+              {t("assessmentSwitchWarning")}
             </div>
 
             {!questions.length?(
               <p>
-                No questions are currently
-                configured for this module.
+                {t("noQuestionsConfigured")}
               </p>
+            ):!translationsComplete?(
+              <p className="form-error">{t("translationsIncomplete")}</p>
             ):(
               <button
                 className="primary"
                 onClick={()=>setStarted(true)}
               >
-                Start Assessment
+                {t("startAssessment")}
               </button>
             )}
           </section>
@@ -252,12 +261,11 @@ export default function Assessment(){
             <AlertTriangle size={48}/>
 
             <h1>
-              Attempt interrupted
+              {t("attemptInterrupted")}
             </h1>
 
             <p>
-              This attempt was not submitted.
-              Start the assessment again.
+              {t("attemptNotSubmitted")}
             </p>
 
             <button
@@ -266,7 +274,7 @@ export default function Assessment(){
                 window.location.reload()
               }
             >
-              Restart Assessment
+              {t("restartAssessment")}
             </button>
           </section>
         </main>
@@ -282,7 +290,7 @@ export default function Assessment(){
         <div className="assessment-header">
           <div>
             <span>
-              ACTIVE ASSESSMENT
+              {t("activeAssessment").toUpperCase()}
             </span>
 
             <h1>
@@ -305,7 +313,7 @@ export default function Assessment(){
               key={q.id}
             >
               <span>
-                QUESTION {index+1}
+                {t("question").toUpperCase()} {index+1}
               </span>
 
               <h2>
@@ -364,9 +372,9 @@ export default function Assessment(){
 
         <div className="submit-bar">
           <span>
-            Answered {
+            {t("answered")} {
               Object.keys(answers).length
-            } of {questions.length}
+            } {t("of")} {questions.length}
           </span>
 
           <button
@@ -377,8 +385,8 @@ export default function Assessment(){
             onClick={submit}
           >
             {submitting
-              ?"Submitting..."
-              :"Submit Assessment"}
+              ?t("submitting")
+              :t("submitAssessment")}
           </button>
         </div>
       </main>

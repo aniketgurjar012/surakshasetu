@@ -7,7 +7,7 @@ import {modules} from "../../data/modules";
 import {useApp} from "../../context/AppContext";
 
 export default function Modules(){
-  const {lang}=useApp();
+  const {lang,t}=useApp();
   const nav=useNavigate();
 
   return (
@@ -16,15 +16,9 @@ export default function Modules(){
 
       <main className="admin-shell">
         <AdminHeader
-          eyebrow="TRAINING CONTENT"
-          title={
-            lang==="hi"
-              ?"प्रशिक्षण मॉड्यूल"
-              :lang==="sat"
-                ?"ᱴᱨᱮᱱᱤᱝ ᱢᱚᱰᱭᱩᱞ"
-                :"Training Modules"
-          }
-          description="Manage assessment content associated with each safety domain."
+          eyebrow={t("trainingContent").toUpperCase()}
+          title={t("modules")}
+          description={t("manageModuleDescription")}
         />
 
         <section className="admin-module-grid">
@@ -51,7 +45,7 @@ export default function Modules(){
 
               <div className="admin-module-topics">
                 {module.topics.map(x=>(
-                  <span key={x}>{x}</span>
+                  <span key={x.en}>{x[lang]||x.en}</span>
                 ))}
               </div>
 
@@ -64,7 +58,7 @@ export default function Modules(){
                 }
               >
                 <HelpCircle/>
-                Manage Questions
+                {t("manageQuestions")}
               </button>
             </article>
           ))}

@@ -13,7 +13,7 @@ import {supabase} from "../../lib/supabase";
 import {useApp} from "../../context/AppContext";
 
 export default function Workers(){
-  const {lang}=useApp();
+  const {t,formatDate}=useApp();
 
   const [workers,setWorkers]=useState([]);
   const [search,setSearch]=useState("");
@@ -65,9 +65,7 @@ export default function Workers(){
   }
 
   async function remove(worker){
-    if(!confirm(
-      `Remove ${worker.name} from Admin worker list?\n\nAssessment and certificate records will remain available.`
-    ))return;
+    if(!confirm(`${worker.name}: ${t("workerRemoveConfirm")}`))return;
 
     const {error}=await supabase
       .from("profiles")
@@ -85,12 +83,7 @@ export default function Workers(){
     load();
   }
 
-  const title=
-    lang==="hi"
-      ?"कर्मचारी प्रबंधन"
-      :lang==="sat"
-        ?"ᱠᱟᱹᱢᱤᱭᱟᱹ ᱢᱮᱱᱮᱡᱽ"
-        :"Worker Management";
+  const title=t("workerManagement");
 
   return (
     <>
@@ -98,13 +91,9 @@ export default function Workers(){
 
       <main className="admin-shell">
         <AdminHeader
-          eyebrow="WORKFORCE"
+          eyebrow={t("workforce").toUpperCase()}
           title={title}
-          description={
-            lang==="hi"
-              ?"पंजीकृत कर्मचारियों और उनकी खाता स्थिति का प्रबंधन करें।"
-              :"View registered workers and manage account status."
-          }
+          description={t("registeredWorkerDesc")}
         />
 
         <div className="admin-search">
@@ -112,28 +101,24 @@ export default function Workers(){
           <input
             value={search}
             onChange={e=>setSearch(e.target.value)}
-            placeholder={
-              lang==="hi"
-                ?"नाम, वर्कर आईडी या सेक्टर खोजें..."
-                :"Search name, Worker ID or sector..."
-            }
+            placeholder={t("searchWorker")}
           />
         </div>
 
         <section className="admin-panel">
           {!filtered.length?(
-            <AdminEmptyState text="No workers found."/>
+            <AdminEmptyState text={t("noWorkersFound")}/>
           ):(
             <div className="admin-table-wrap">
               <table className="admin-table">
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Worker ID</th>
-                    <th>Sector</th>
-                    <th>Status</th>
-                    <th>Joined</th>
-                    <th>Actions</th>
+                    <th>{t("name")}</th>
+                    <th>{t("workerId")}</th>
+                    <th>{t("sector")}</th>
+                    <th>{t("status")}</th>
+                    <th>{t("joined")}</th>
+                    <th>{t("actions")}</th>
                   </tr>
                 </thead>
 
@@ -146,7 +131,7 @@ export default function Workers(){
 
                       <td>{worker.public_id}</td>
 
-                      <td>{worker.sector||"—"}</td>
+                      <td>{localizeSector(worker.sector,t)||"—"}</td>
 
                       <td>
                         <span
@@ -156,30 +141,20 @@ export default function Workers(){
                               :"admin-badge danger"
                           }
                         >
-                          {worker.active
-                            ?"Active"
-                            :"Inactive"}
+                          {worker.active?t("active"):t("inactive")}
                         </span>
                       </td>
 
                       <td>
-                        {new Date(
-                          worker.created_at
-                        ).toLocaleDateString()}
+                        {formatDate(worker.created_at)}
                       </td>
 
                       <td>
                         <div className="admin-row-actions">
                           <button
-                            className={
-                              worker.active
-                                ?"admin-icon warning"
-                                :"admin-icon success"
-                            }
+                            className={worker.active?"admin-icon warning":"admin-icon success"}
                             title={
-                              worker.active
-                                ?"Deactivate"
-                                :"Activate"
+                              worker.active?t("deactivate"):t("activate")
                             }
                             onClick={()=>toggle(worker)}
                           >
@@ -190,7 +165,7 @@ export default function Workers(){
 
                           <button
                             className="admin-icon danger"
-                            title="Remove"
+                            title={t("remove")}
                             onClick={()=>remove(worker)}
                           >
                             <Trash2/>
@@ -207,4 +182,9 @@ export default function Workers(){
       </main>
     </>
   );
+}
+
+function localizeSector(value,t){
+  const keys={Mining:"mining",Steel:"steel",Manufacturing:"manufacturing","Mica Processing":"micaProcessing","Contract Work":"contractWork",Other:"other"};
+  return keys[value]?t(keys[value]):value;
 }

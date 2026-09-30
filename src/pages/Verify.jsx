@@ -18,8 +18,11 @@ import {
 
 import Logo from "../components/Logo";
 import {supabase} from "../lib/supabase";
+import {useApp} from "../context/AppContext";
+import {getModule} from "../data/modules";
 
 export default function Verify(){
+  const {lang,setLang,t,formatDate}=useApp();
   const [params]=useSearchParams();
   const nav=useNavigate();
 
@@ -64,12 +67,20 @@ export default function Verify(){
 
   return (
     <main className="verify-page">
+      <label className="auth-language">
+        <span>{t("language")}</span>
+        <select value={lang} onChange={e=>setLang(e.target.value)}>
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="sat">ᱥᱟᱱᱛᱟᱲᱤ</option>
+        </select>
+      </label>
       <button
         className="back-link"
         onClick={()=>nav("/")}
       >
         <ArrowLeft/>
-        Home
+        {t("home")}
       </button>
 
       <Logo/>
@@ -78,12 +89,11 @@ export default function Verify(){
         <BadgeCheck size={47}/>
 
         <h1>
-          Certificate Verification
+          {t("certificateVerification")}
         </h1>
 
         <p>
-          Enter the unique SurakshaSetu
-          Certificate ID.
+          {t("enterCertificateId")}
         </p>
 
         <div className="verify-search">
@@ -105,8 +115,8 @@ export default function Verify(){
           >
             <Search/>
             {busy
-              ?"Checking..."
-              :"Verify"}
+              ?t("checking")
+              :t("verifyAction")}
           </button>
         </div>
 
@@ -116,41 +126,39 @@ export default function Verify(){
 
             <div>
               <b>
-                Certificate Verified
+                {t("certificateVerified")}
               </b>
 
               <span>
-                Authentic SurakshaSetu record
+                {t("authenticRecord")}
               </span>
             </div>
 
             <dl>
-              <dt>Worker</dt>
+              <dt>{t("worker")}</dt>
               <dd>{record.worker_name}</dd>
 
-              <dt>Worker ID</dt>
+              <dt>{t("workerId")}</dt>
               <dd>
                 {record.worker_public_id}
               </dd>
 
-              <dt>Certificate</dt>
+              <dt>{t("certificate")}</dt>
               <dd>
                 {record.certificate_no}
               </dd>
 
-              <dt>Module</dt>
-              <dd>{record.module_id}</dd>
+              <dt>{t("module")}</dt>
+              <dd>{getModule(record.module_id)?.title?.[lang]||getModule(record.module_id)?.title?.en||record.module_id}</dd>
 
-              <dt>Score</dt>
+              <dt>{t("score")}</dt>
               <dd>
                 {Math.round(record.score)}%
               </dd>
 
-              <dt>Issued</dt>
+              <dt>{t("issued")}</dt>
               <dd>
-                {new Date(
-                  record.issued_at
-                ).toLocaleDateString()}
+                {formatDate(record.issued_at)}
               </dd>
             </dl>
           </div>
@@ -159,15 +167,14 @@ export default function Verify(){
         {searched&&record?.revoked&&(
           <div className="invalid-card">
             <ShieldX/>
-            This certificate has been revoked
-            and is no longer valid.
+            {t("certificateRevoked")}
           </div>
         )}
 
         {searched&&!record&&(
           <div className="invalid-card">
             <XCircle/>
-            Certificate not found.
+            {t("certificateNotFound")}
           </div>
         )}
       </div>

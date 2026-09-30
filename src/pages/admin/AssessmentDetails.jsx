@@ -8,8 +8,11 @@ import {
 import Navbar from "../../components/Navbar";
 import AdminHeader from "../../components/admin/AdminHeader";
 import {supabase} from "../../lib/supabase";
+import {useApp} from "../../context/AppContext";
+import {getModule} from "../../data/modules";
 
 export default function AssessmentDetails(){
+  const {lang,t,formatDateTime}=useApp();
   const {id}=useParams();
   const nav=useNavigate();
 
@@ -42,7 +45,7 @@ export default function AssessmentDetails(){
 
   async function remove(){
     if(!confirm(
-      "Remove this assessment from Admin records?"
+      t("assessmentDeleteConfirm")
     ))return;
 
     await supabase
@@ -67,61 +70,59 @@ export default function AssessmentDetails(){
 
       <main className="admin-shell">
         <AdminHeader
-          eyebrow="ASSESSMENT DETAIL"
-          title={`${worker?.name||"Worker"} • ${Math.round(record.percentage)}%`}
-          description={`${worker?.public_id||""} • ${record.module_id}`}
+          eyebrow={t("assessmentRecords").toUpperCase()}
+          title={`${worker?.name||t("worker")} • ${Math.round(record.percentage)}%`}
+          description={`${worker?.public_id||""} • ${getModule(record.module_id)?.title?.[lang]||record.module_id}`}
         >
           <button
             className="admin-danger"
             onClick={remove}
           >
             <Trash2/>
-            Remove
+            {t("remove")}
           </button>
         </AdminHeader>
 
         <section className="admin-detail-grid">
           <Detail
-            title="Worker"
+            title={t("worker")}
             value={worker?.name}
           />
 
           <Detail
-            title="Worker ID"
+            title={t("workerId")}
             value={worker?.public_id}
           />
 
           <Detail
-            title="Sector"
-            value={worker?.sector}
+            title={t("sector")}
+            value={localizeSector(worker?.sector,t)}
           />
 
           <Detail
-            title="Module"
-            value={record.module_id}
+            title={t("module")}
+            value={getModule(record.module_id)?.title?.[lang]||record.module_id}
           />
 
           <Detail
-            title="Score"
+            title={t("score")}
             value={`${record.score}/${record.total}`}
           />
 
           <Detail
-            title="Percentage"
+            title={t("percentage")}
             value={`${Math.round(record.percentage)}%`}
           />
 
           <Detail
-            title="Status"
-            value={record.status}
+            title={t("status")}
+            value={record.status==="completed"?t("completed"):record.status}
           />
 
           <Detail
-            title="Submitted"
+            title={t("submitted")}
             value={
-              new Date(
-                record.created_at
-              ).toLocaleString()
+              formatDateTime(record.created_at)
             }
           />
         </section>
@@ -137,4 +138,9 @@ function Detail({title,value}){
       <strong>{value||"—"}</strong>
     </article>
   );
+}
+
+function localizeSector(value,t){
+  const keys={Mining:"mining",Steel:"steel",Manufacturing:"manufacturing","Mica Processing":"micaProcessing","Contract Work":"contractWork",Other:"other"};
+  return keys[value]?t(keys[value]):value;
 }

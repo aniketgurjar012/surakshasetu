@@ -26,7 +26,7 @@ export default function Certificate(){
   }=useParams();
 
   const nav=useNavigate();
-  const {profile,lang}=useApp();
+  const {profile,lang,t,formatDate}=useApp();
 
   const [cert,setCert]=useState(null);
   const [submission,setSubmission]=useState(null);
@@ -207,7 +207,7 @@ export default function Certificate(){
     doc.setTextColor(20,35,30);
     doc.setFontSize(24);
     doc.text(
-      "Certificate of Completion",
+      t("certificateOfCompletion"),
       148.5,
       57,
       {align:"center"}
@@ -215,7 +215,7 @@ export default function Certificate(){
 
     doc.setFontSize(13);
     doc.text(
-      "This certificate is awarded to",
+      t("awardedTo"),
       148.5,
       75,
       {align:"center"}
@@ -231,15 +231,15 @@ export default function Certificate(){
 
     doc.setFontSize(12);
     doc.text(
-      `Worker ID: ${profile.public_id}`,
+      `${t("workerId")}: ${profile.public_id}`,
       148.5,
       106,
       {align:"center"}
     );
 
     doc.text(
-      `Module: ${
-        module?.title?.en||
+      `${t("module")}: ${
+        module?.title?.[lang]||
         cert.module_id
       }`,
       148.5,
@@ -248,14 +248,14 @@ export default function Certificate(){
     );
 
     doc.text(
-      `Score: ${Math.round(cert.score)}%`,
+      `${t("score")}: ${Math.round(cert.score)}%`,
       148.5,
       132,
       {align:"center"}
     );
 
     doc.text(
-      `Certificate ID: ${
+      `${t("certificateId")}: ${
         cert.certificate_no
       }`,
       148.5,
@@ -296,7 +296,7 @@ export default function Certificate(){
           onClick={()=>nav("/worker")}
         >
           <ArrowLeft/>
-          Dashboard
+          {t("dashboardBack")}
         </button>
 
         {!cert?(
@@ -304,7 +304,7 @@ export default function Certificate(){
             <ShieldCheck size={52}/>
 
             <h1>
-              Certificate ready
+              {t("certificateReady")}
             </h1>
 
             <p>
@@ -318,8 +318,8 @@ export default function Certificate(){
               onClick={generate}
             >
               {busy
-                ?"Generating..."
-                :"Generate Certificate"}
+                ?t("generating")
+                :t("generateCertificate")}
             </button>
           </section>
         ):(
@@ -340,16 +340,15 @@ export default function Certificate(){
                 </div>
 
                 <span>
-                  CERTIFICATE OF COMPLETION
+                  {t("certificateOfCompletion").toUpperCase()}
                 </span>
 
                 <h1>
-                  Congratulations
+                  {t("congratulations")}
                 </h1>
 
                 <p>
-                  This certificate is
-                  proudly awarded to
+                  {t("awardedTo")}
                 </p>
 
                 <h2>
@@ -357,7 +356,7 @@ export default function Certificate(){
                 </h2>
 
                 <p>
-                  Worker ID:
+                  {t("workerId")}:
                   {" "}
                   {profile?.public_id}
                 </p>
@@ -371,7 +370,7 @@ export default function Certificate(){
 
                 <div className="certificate-data">
                   <div>
-                    <span>Score</span>
+                    <span>{t("score")}</span>
                     <b>
                       {Math.round(
                         cert.score
@@ -381,7 +380,7 @@ export default function Certificate(){
 
                   <div>
                     <span>
-                      Certificate ID
+                      {t("certificateId")}
                     </span>
                     <b>
                       {
@@ -391,14 +390,8 @@ export default function Certificate(){
                   </div>
 
                   <div>
-                    <span>Issued</span>
-                    <b>
-                      {
-                        new Date(
-                          cert.issued_at
-                        ).toLocaleDateString()
-                      }
-                    </b>
+                    <span>{t("issued")}</span>
+                    <b>{formatDate(cert.issued_at)}</b>
                   </div>
                 </div>
 
@@ -406,13 +399,12 @@ export default function Certificate(){
                   <img
                     src={qr}
                     className="certificate-qr"
-                    alt="Verification QR"
+                    alt={t("verificationQr")}
                   />
                 )}
 
                 <small>
-                  Scan QR to verify this
-                  certificate online.
+                  {t("scanToVerify")}
                 </small>
               </div>
             </section>
@@ -422,7 +414,7 @@ export default function Certificate(){
               onClick={pdf}
             >
               <Download/>
-              Download PDF
+              {t("downloadPdf")}
             </button>
           </>
         )}

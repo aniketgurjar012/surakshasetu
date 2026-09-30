@@ -17,8 +17,11 @@ import Navbar from "../../components/Navbar";
 import AdminHeader from "../../components/admin/AdminHeader";
 import AdminEmptyState from "../../components/admin/AdminEmptyState";
 import {supabase} from "../../lib/supabase";
+import {useApp} from "../../context/AppContext";
+import {getModule} from "../../data/modules";
 
 export default function Certificates(){
+  const {lang,t,formatDate}=useApp();
   const nav=useNavigate();
 
   const [certs,setCerts]=useState([]);
@@ -100,7 +103,7 @@ export default function Certificates(){
     if(cert.revoked)return;
 
     if(!confirm(
-      `Revoke certificate ${cert.certificate_no}?`
+      `${cert.certificate_no}: ${t("certificateRevokeConfirm")}`
     ))return;
 
     const {error}=await supabase
@@ -126,9 +129,9 @@ export default function Certificates(){
 
       <main className="admin-shell">
         <AdminHeader
-          eyebrow="CERTIFICATION"
-          title="Certificate Centre"
-          description="Search issued certificates by worker name, Worker ID or Certificate ID."
+          eyebrow={t("certificates").toUpperCase()}
+          title={t("issuedCertificates")}
+          description={t("searchCertificates")}
         />
 
         <div className="admin-search certificate-search">
@@ -139,35 +142,34 @@ export default function Certificates(){
             onChange={e=>
               setSearch(e.target.value)
             }
-            placeholder="Search Worker Name / Worker ID / Certificate ID..."
+            placeholder={t("searchCertificates")}
           />
         </div>
 
         <div className="admin-result-count">
           {filtered.length}
           {" "}
-          certificate
-          {filtered.length===1?"":"s"} found
+          {filtered.length===1?t("oneCertificateFound"):t("certificateCount")}
         </div>
 
         <section className="admin-panel">
           {!filtered.length?(
             <AdminEmptyState
-              text="No matching certificate found."
+              text={t("noCertificates")}
             />
           ):(
             <div className="admin-table-wrap">
               <table className="admin-table">
                 <thead>
                   <tr>
-                    <th>Certificate ID</th>
-                    <th>Worker</th>
-                    <th>Worker ID</th>
-                    <th>Module</th>
-                    <th>Score</th>
-                    <th>Status</th>
-                    <th>Issued</th>
-                    <th>Actions</th>
+                    <th>{t("certificateId")}</th>
+                    <th>{t("worker")}</th>
+                    <th>{t("workerId")}</th>
+                    <th>{t("module")}</th>
+                    <th>{t("score")}</th>
+                    <th>{t("status")}</th>
+                    <th>{t("issued")}</th>
+                    <th>{t("actions")}</th>
                   </tr>
                 </thead>
 
@@ -185,7 +187,7 @@ export default function Certificates(){
                         </td>
 
                         <td>
-                          {worker?.name||"Unknown"}
+                          {worker?.name||t("user")}
                         </td>
 
                         <td>
@@ -193,7 +195,7 @@ export default function Certificates(){
                         </td>
 
                         <td>
-                          {cert.module_id}
+                          {getModule(cert.module_id)?.title?.[lang]||cert.module_id}
                         </td>
 
                         <td>
@@ -209,22 +211,21 @@ export default function Certificates(){
                             }
                           >
                             {cert.revoked
-                              ?"Revoked"
-                              :"Verified"}
+                              ?t("revoked")
+                              :t("verified")}
                           </span>
                         </td>
 
                         <td>
-                          {new Date(
-                            cert.issued_at
-                          ).toLocaleDateString()}
+                          {formatDate(cert.issued_at)}
                         </td>
 
                         <td>
                           <div className="admin-row-actions">
                             <button
                               className="admin-icon"
-                              title="View"
+                              title={t("view")}
+                              aria-label={t("view")}
                               onClick={()=>
                                 nav(
                                   `/admin/certificates/${cert.id}`
@@ -237,7 +238,8 @@ export default function Certificates(){
                             {!cert.revoked&&(
                               <button
                                 className="admin-icon danger"
-                                title="Revoke"
+                                title={t("revoke")}
+                                aria-label={t("revoke")}
                                 onClick={()=>
                                   revoke(cert)
                                 }
